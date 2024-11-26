@@ -1,6 +1,8 @@
 import { useAuth } from "../authCrap/AuthProvider";
-import VolunteerDashboard from "../components/dashboard/VolunteerDashboard";
-import OrganizationDashboard from "../components/dashboard/OrganizationDashboard";
+import VolunteerBio from "../components/dashboard/VolunteerBio";
+import VolunteerJobsList from "../components/dashboard/VolunteerJobsList";
+import OrganizationProfile from "../components/dashboard/OrganizationProfile";
+import OrganizationJobsList from "../components/dashboard/OrganizationJobList";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -13,9 +15,15 @@ const Dashboard = () => {
         </h1>
       </div>
       {user.type === "volunteer" ? (
-        <VolunteerDashboard user={user} />
+        <div>
+          <VolunteerBio user={user} />
+          <VolunteerJobsList user={user} />
+        </div>
       ) : (
-        <OrganizationDashboard user={user} />
+        <div>
+          <OrganizationProfile user={user} />
+          <OrganizationJobsList user={user} />
+        </div>
       )}
     </div>
   );

@@ -1,10 +1,11 @@
 import { useState } from "react";
 
-const Toggle = () => {
+const Toggle = ({ setListings }) => {
   const [isToggled, setIsToggled] = useState(false);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
+    setListings((prevListings) => [...prevListings].reverse());
   };
 
   return (

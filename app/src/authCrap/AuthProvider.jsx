@@ -1,6 +1,6 @@
 import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { signUpUser, loginUser } from "../services/api";
 
 const AuthContext = createContext();
 
@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const loginAction = async (data) => {
     try {
-      /* const response = await axios.post("your-api-endpoint/auth/login", data);
+      /* const response = await loginUser(data);
       const res = await response.json(); */
       const res = {
         data: {
@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
             id: 1,
             name: "Vincent Ostrowski",
             email: "email",
-            type: "volunteer",
+            type: "organization",
             bio: "I am just a chill guy that loves to play basketball with my boys and go on hikes with the ladies. I am a team player and I am always looking to help out my community.",
             traits: [
               "Teamwork",
@@ -51,7 +51,7 @@ const AuthProvider = ({ children }) => {
 
   const signUpAction = async (data) => {
     try {
-      /* const response = await axios.post("your-api-endpoint/auth/signup", data);
+      /* const response = await signUpUser(data);
       const res = await response.json(); */
       const res = {
         data: {
