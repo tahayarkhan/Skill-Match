@@ -47,9 +47,10 @@ export const getRankedOpportunities = async () => {
   return response.data;
 };
 
+//Completed
 //Fetch all opportunities user has applied to
-export const getAppliedOpportunities = async () => {
-  const response = await axios.get(`${API_URL}/opportunities/applied/`);
+export const getAppliedOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/applied/${id}`);
   return response.data;
 };
 

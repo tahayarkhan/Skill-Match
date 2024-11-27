@@ -145,11 +145,12 @@ async def create_application(application: Application):
         raise HTTPException(status_code=400, detail="Failed to create application")
     return response.data
 
-@app.get("/applications/{user_id}")
+@app.get("/opportunities/applied/{user_id}")
 async def get_user_applications(user_id: str):
-    response = supabase.table("applications_table").select("*").eq("user_id", user_id).execute()
+    response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id)").eq("user_id", user_id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch applications")
     return response.data
-
 
 @app.get("/volunteers/")
 async def get_volunteers():

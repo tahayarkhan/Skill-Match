@@ -2,58 +2,17 @@ import { useState, useEffect } from "react";
 import { getAppliedOpportunities } from "../../services/api";
 
 const VolunteerJobsList = ({ user }) => {
-  const jobs_mock = [
-    {
-      id: 1,
-      title: "Volunteer at the Food Bank",
-      description: "Help sort and package food donations.",
-      location: "123 Main St",
-      date: "2021-12-25",
-      time: "12:00 PM",
-      slots: 5,
-      filled: 3,
-      organization: "Food Bank",
-      category: "Food",
-      skills: ["Organization", "Teamwork", "Communication"],
-    },
-    {
-      id: 2,
-      title: "Park Cleanup",
-      description: "Clean up trash and plant flowers.",
-      location: "456 Elm St",
-      date: "2021-12-26",
-      time: "9:00 AM",
-      slots: 10,
-      filled: 7,
-      organization: "Parks Department",
-      category: "Environment",
-      skills: ["Physical Strength", "Attention to Detail", "Teamwork"],
-    },
-    {
-      id: 4,
-      title: "Plant Trees",
-      description: "Plant trees in the park.",
-      location: "101 Pine St",
-      date: "2021-12-28",
-      time: "10:00 AM",
-      slots: 8,
-      filled: 5,
-      organization: "Parks Department",
-      category: "Environment",
-      skills: ["Physical Strength", "Teamwork", "Attention to Detail"],
-    },
-  ];
-
-  const [jobs, setJobs] = useState(jobs_mock);
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     const fetchAppliedOpportunities = async () => {
-      const opportunities = await getAppliedOpportunities();
+      const opportunities = await getAppliedOpportunities(user.id);
+      console.log(opportunities);
       setJobs(opportunities);
     };
 
     fetchAppliedOpportunities();
-  });
+  }, []);
 
   return (
     <div>
@@ -76,20 +35,11 @@ const VolunteerJobsList = ({ user }) => {
                   </div>
                   <div className="flex-1">
                     <h2 className="text-xl font-semibold text-gray-800">
-                      {job.title}
+                      {job.opportunities_table.title}
                     </h2>
-                    <p className="text-gray-600 mt-2">{job.description}</p>
-                    <div className="text-sm text-gray-500 mt-2">
-                      <p>
-                        <strong>Location:</strong> {job.location}
-                      </p>
-                      <p>
-                        <strong>Date:</strong> {job.date}
-                      </p>
-                      <p>
-                        <strong>Time:</strong> {job.time}
-                      </p>
-                    </div>
+                    <p className="text-gray-600 mt-2">
+                      {job.opportunities_table.description}
+                    </p>
                   </div>
                 </div>
                 <div className="mt-4">
