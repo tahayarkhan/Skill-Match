@@ -21,11 +21,6 @@ export const createOpportunity = async (opportunity) => {
   return response.data;
 };
 
-export const applyForOpportunity = async (application) => {
-  const response = await axios.post(`${API_URL}/applications/`, application);
-  return response.data;
-};
-
 //Fetch all opportunities for non-volunteer users
 export const getOpportunities = async () => {
   const response = await axios.get(`${API_URL}/opportunities/`);
@@ -50,9 +45,32 @@ export const getCreatedOpportunities = async () => {
   return response.data;
 };
 
+//APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS
+export const applyForOpportunity = async (application) => {
+  const response = await axios.post(`${API_URL}/applications/`, application);
+  return response.data;
+};
+
+export const getApplications = async (jobId) => {
+  const response = await axios.get(`${API_URL}/applications/`, jobId);
+  return response.data;
+};
+
+export const acceptApplication = async (applicationId) => {
+  const response = await axios.post(`${API_URL}/applications/accept/`, {
+    applicationId,
+  });
+  return response.data;
+};
+
 //OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER OTHER
 //Enhance the application text
 export const enhanceApplication = async (text) => {
   const response = await axios.post(`${API_URL}/enhance/`, { text });
+  return response.data;
+};
+
+export const enhanceBio = async (text) => {
+  const response = await axios.post(`${API_URL}/enhance/bio/`, { text });
   return response.data;
 };

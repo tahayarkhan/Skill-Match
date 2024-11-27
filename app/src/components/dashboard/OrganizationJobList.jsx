@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CreateJobModal from "./CreateJobModal";
+import ApplicationsModal from "./ApplicationsModal";
 import { getCreatedOpportunities } from "../../services/api";
 
 const OrganizationJobsList = ({ user }) => {
@@ -46,10 +47,15 @@ const OrganizationJobsList = ({ user }) => {
   ];
 
   const [jobs, setJobs] = useState(jobs_mock);
-  const [showModal, setShowModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [job, setJob] = useState(false);
 
   const handleAddJob = () => {
-    setShowModal(true);
+    setShowCreateModal(true);
+  };
+
+  const handleView = (job) => {
+    setJob(job);
   };
 
   useEffect(() => {
@@ -99,8 +105,11 @@ const OrganizationJobsList = ({ user }) => {
                   </div>
                 </div>
                 <div className="mt-4 w-full flex justify-between">
-                  <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    View Applicants
+                  <button
+                    onClick={() => handleView(job)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    View Applications
                   </button>
                   <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                     Delete
@@ -119,7 +128,10 @@ const OrganizationJobsList = ({ user }) => {
           <span className="text-2xl">+</span>
         </button>
       </div>
-      {showModal && <CreateJobModal onClose={() => setShowModal(false)} />}
+      {showCreateModal && (
+        <CreateJobModal onClose={() => setShowCreateModal(false)} />
+      )}
+      {job && <ApplicationsModal job={job} onClose={() => setJob(false)} />}
     </div>
   );
 };

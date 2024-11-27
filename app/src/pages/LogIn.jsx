@@ -81,32 +81,6 @@ const Login = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
-
-        <div className="mb-4">
-          <label className="inline-flex items-center mr-4">
-            <input
-              type="radio"
-              name="userType"
-              value="volunteer"
-              checked={formData.userType === "volunteer"}
-              onChange={handleChange}
-              className="form-radio"
-            />
-            <span className="ml-2">Volunteer</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="userType"
-              value="employer"
-              checked={formData.userType === "employer"}
-              onChange={handleChange}
-              className="form-radio"
-            />
-            <span className="ml-2">Employer</span>
-          </label>
-        </div>
-
         <button
           type="submit"
           disabled={loading}

@@ -1,24 +1,21 @@
 import { useState } from "react";
 import { createOpportunity } from "../../services/api";
+import { useAuth } from "../../authCrap/AuthProvider";
 
 const CreateJobModal = ({ onClose }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [slots, setSlots] = useState("");
+  const user = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newJob = {
       title,
       description,
-      location,
-      date,
-      time,
-      slots,
+      employer_id: user.user.id,
+      /// REVIEW: see if necessary to extract traits in backend
     };
+    console.log(newJob);
     await createOpportunity(newJob);
     onClose();
   };
@@ -49,46 +46,6 @@ const CreateJobModal = ({ onClose }) => {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Location</label>
-            <input
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Time</label>
-            <input
-              type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Slots</label>
-            <input
-              type="number"
-              value={slots}
-              onChange={(e) => setSlots(e.target.value)}
               className="w-full px-3 py-2 border rounded"
               required
             />

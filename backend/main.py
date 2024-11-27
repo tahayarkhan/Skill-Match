@@ -10,7 +10,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Allow only your frontend origin
+    allow_origins=["http://localhost:5173", "http://localhost:8000"],  # Allow only your frontend origin
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
@@ -51,42 +51,30 @@ class EmployerLogin(BaseModel):
 async def read_root():
     return {"message": "Welcome to the API!"}
 
-
-@app.post("/login/volunteer/")
-async def login_volunteer(user: UserLogin):
-    # Fetch user data based on email
+@app.post("/login/")
+async def login(user: UserLogin):
+    # Check if Volunteer exists
     response = supabase.table("volunteers_table").select("*").eq("email", user.email).execute()
-    user_data = response.data
-    
-    if not user_data:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+    volunteer_data = response.data
+    if volunteer_data:
+        stored_user = volunteer_data[0]
+        stored_password_hash = stored_user['password']
+        if not bcrypt.checkpw(user.password.encode('utf-8'), stored_password_hash.encode('utf-8')):
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        return {"message": "Login successful", "user": stored_user, "type": "volunteer"}
 
-    stored_user = user_data[0]
-    stored_password_hash = stored_user['password']  # Assume this is the hashed password stored in your database
-
-    # Verify the password
-    if not bcrypt.checkpw(user.password.encode('utf-8'), stored_password_hash.encode('utf-8')):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
-    return {"message": "User login successful", "user": stored_user}
-
-@app.post("/login/employer/")
-async def login_employer(employer: EmployerLogin):
-    # Fetch employer data based on email
-    response = supabase.table("employers_table").select("*").eq("email", employer.email).execute()
+    # Check if Employer exists
+    response = supabase.table("employers_table").select("*").eq("email", user.email).execute()
     employer_data = response.data
+    if employer_data:
+        stored_employer = employer_data[0]
+        stored_password_hash = stored_employer['password']
+        if not bcrypt.checkpw(user.password.encode('utf-8'), stored_password_hash.encode('utf-8')):
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        return {"message": "Login successful", "user": stored_employer, "type": "employer"}
     
-    if not employer_data:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
-    stored_employer = employer_data[0]
-    stored_password_hash = stored_employer['password']  # Assume this is the hashed password stored in your database
-
-    # Verify the password
-    if not bcrypt.checkpw(employer.password.encode('utf-8'), stored_password_hash.encode('utf-8')):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
-    return {"message": "Employer login successful", "employer": stored_employer}
+    # If neither Volunteer nor Employer exists
+    raise HTTPException(status_code=401, detail="Invalid email or password")
 
 @app.post("/signup/")
 async def sign_up(user: Volunteer):
@@ -102,6 +90,7 @@ async def sign_up(user: Volunteer):
             # Additional fields as necessary
         }
         response = supabase.table("employers_table").insert(employer_data).execute()
+        return {"message": "Signup successful", "user": response.data, "type": "employer"}
 
     else:  # This indicates that it's a user
         volunteer_data = {
@@ -113,14 +102,17 @@ async def sign_up(user: Volunteer):
         }
 
         response = supabase.table("volunteers_table").insert(volunteer_data).execute()
-
-    return {"message": "Signup successful", "user": response.data}
+        return {"message": "Signup successful", "user": response.data, "type": "volunteer"}
 
 @app.post("/opportunities/")
 async def create_opportunity(opportunity: Opportunity):
-    response = supabase.table("opportunities_table").insert(opportunity.dict()).execute()
-    if response.status_code != 201:
-        raise HTTPException(status_code=response.status_code, detail=response.data)
+    # log the opportunity to debug 
+    print(f"Creating opportunity: {opportunity}")
+    opportunity_data = opportunity.dict()
+    opportunity_data["employer_id"] = opportunity.employer_id
+    response = supabase.table("opportunities_table").insert(opportunity_data).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to create opportunity")
     return response.data
 
 @app.get("/opportunities/")

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Change to useNavigate
 import { useAuth } from "../authCrap/AuthProvider";
+import ai from "../assets/ai.png";
+import { enhanceBio } from "../services/api";
 
 const SignUp = () => {
   const { signUpAction } = useAuth();
@@ -32,15 +34,16 @@ const SignUp = () => {
       setSuccessMessage(
         "Sign up successful! Please check your email for confirmation."
       );
-      // Redirect to employer homepage if userType is employer
-      if (formData.userType === "employer") {
-        navigate("/employer-home"); // Change this to your employer homepage route
-      }
     } catch (err) {
       setError("Failed to sign up. Please try again later.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAI = async () => {
+    const enhancedSkills = await enhanceBio(formData.skills);
+    setFormData({ ...formData, skills: enhancedSkills });
   };
 
   return (
@@ -90,15 +93,21 @@ const SignUp = () => {
         </div>
 
         {formData.userType === "volunteer" && (
-          <div className="mb-4">
+          <div className="relative">
             <textarea
               name="skills"
               placeholder="Your Skills/Interests"
               value={formData.skills}
               onChange={handleChange}
               required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-24"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-24 resize-none"
             />
+            <div
+              onClick={handleAI}
+              className="absolute bottom-1 right-1 w-8 h-8 m-2 rounded-full hover:bg-gray-200 flex justify-center items-center"
+            >
+              <img src={ai} alt="AI" className="w-6 h-6" />
+            </div>
           </div>
         )}
 
