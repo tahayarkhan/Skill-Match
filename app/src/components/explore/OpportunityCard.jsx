@@ -1,5 +1,6 @@
 import { useState } from "react";
 import OpportunityModal from "./OpportunityModal";
+import noImage from "../../assets/default.png";
 
 const OpportunityCard = ({ listing }) => {
   const [show, setShow] = useState(false);
@@ -21,13 +22,12 @@ const OpportunityCard = ({ listing }) => {
       <h2 className="text-lg font-semibold text-gray-800">{listing.title}</h2>
       <div className="bg-gray-500 mb-2">
         <img
-          src={listing.image}
+          src={listing.image ? listing.image : noImage}
           alt={listing.title}
           className="w-full h-32 object-cover mt-2"
         />
       </div>
-      <p className="text-sm text-gray-600">{listing.company}</p>
-      <p className="text-sm text-gray-500">{listing.location}</p>
+      <p className="text-sm text-gray-600">{listing.employers_table.name}</p>
       <p className="text-sm text-gray-700 mt-2">{listing.description}</p>
       {show && (
         <OpportunityModal

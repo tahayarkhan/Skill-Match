@@ -30,51 +30,6 @@ const ExplorePage = () => {
     fetchOpportunities();
   }, [filters]);
 
-  //Mock
-  useEffect(() => {
-    setListings([
-      {
-        id: 1,
-        title: "Volunteer at the Food Bank",
-        description: "Help sort and package food donations.",
-        location: "123 Main St",
-        date: "2021-12-25",
-        time: "12:00 PM",
-        slots: 5,
-        filled: 3,
-        organization: "Food Bank",
-        category: "Food",
-        skills: ["Organization", "Teamwork", "Communication"],
-      },
-      {
-        id: 2,
-        title: "Park Cleanup",
-        description: "Clean up trash and plant flowers.",
-        location: "456 Elm St",
-        date: "2021-12-26",
-        time: "9:00 AM",
-        slots: 10,
-        filled: 7,
-        organization: "Parks Department",
-        category: "Environment",
-        skills: ["Physical Strength", "Attention to Detail", "Teamwork"],
-      },
-      {
-        id: 3,
-        title: "Read to Kids",
-        description: "Read books to children at the library.",
-        location: "789 Oak St",
-        date: "2021-12-27",
-        time: "3:00 PM",
-        slots: 4,
-        filled: 2,
-        organization: "Library",
-        category: "Education",
-        skills: ["Reading", "Patience", "Public Speaking"],
-      },
-    ]);
-  }, []);
-
   return (
     <div className="flex h-full w-full">
       <div className="w-1/4 h-full p-4">

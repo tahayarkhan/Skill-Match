@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from supabase import create_client, Client
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -37,6 +37,7 @@ class Opportunity(BaseModel):
 class Application(BaseModel):
     user_id: str
     opportunity_id: str
+    entry: str
 
 class UserLogin(BaseModel):
     email: str
@@ -109,7 +110,6 @@ async def create_opportunity(opportunity: Opportunity):
     # log the opportunity to debug 
     print(f"Creating opportunity: {opportunity}")
     opportunity_data = opportunity.dict()
-    opportunity_data["employer_id"] = opportunity.employer_id
     response = supabase.table("opportunities_table").insert(opportunity_data).execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to create opportunity")
@@ -117,14 +117,32 @@ async def create_opportunity(opportunity: Opportunity):
 
 @app.get("/opportunities/")
 async def get_opportunities():
-    response = supabase.table("opportunities_table").select("*").execute()
+    response = supabase.from_("opportunities_table").select("*, employers_table(name)").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
+
+@app.get("/opportunities/created")
+async def get_opportunities(id: str = Query(...)):  # Ensure `id` is a required query parameter
+    response = supabase.from_("opportunities_table").select("*, employers_table(name)").eq("employer_id", id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
+    return response.data
+
+@app.get("/opportunities/ranked")
+async def get_opportunities():
+    response = supabase.from_("opportunities_table").select("*, employers_table(name)").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
+    return response.data
+
 
 @app.post("/applications/")
 async def create_application(application: Application):
-    response = supabase.table("applications_table").insert(application.dict()).execute()
-    if response.status_code != 201:
-        raise HTTPException(status_code=response.status_code, detail=response.data)
+    application_data = application.dict()
+    response = supabase.table("applications_table").insert(application_data).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to create application")
     return response.data
 
 @app.get("/applications/{user_id}")

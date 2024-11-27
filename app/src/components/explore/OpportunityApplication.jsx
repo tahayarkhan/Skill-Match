@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { enhanceApplication, applyForOpportunity } from "../../services/api";
 import ai from "../../assets/ai.png";
+import { useAuth } from "../../authCrap/AuthProvider";
 
 const OpportunityApplication = ({ listing, handleBack, handleClose }) => {
   const [applicationText, setApplicationText] = useState("");
+  const user = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await applyForOpportunity({
-        opportunity: listing.id,
-        text: applicationText,
+        opportunity_id: listing.id,
+        entry: applicationText,
+        user_id: user.user.id,
       });
       alert("Application submitted!");
       handleClose(e);

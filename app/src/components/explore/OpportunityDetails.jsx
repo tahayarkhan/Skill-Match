@@ -5,8 +5,7 @@ const OpportunityDetails = ({ listing, handleApply }) => {
 
   return (
     <div>
-      <p className="text-gray-600">{listing.company}</p>
-      <p className="text-gray-500">{listing.location}</p>
+      <p className="text-gray-600">{listing.employers_table.name}</p>
       <p className="text-gray-700 mt-4">{listing.description}</p>
       {user && user.type === "volunteer" && (
         <button

@@ -4,49 +4,7 @@ import ApplicationsModal from "./ApplicationsModal";
 import { getCreatedOpportunities } from "../../services/api";
 
 const OrganizationJobsList = ({ user }) => {
-  const jobs_mock = [
-    {
-      id: 1,
-      title: "Volunteer at the Food Bank",
-      description: "Help sort and package food donations.",
-      location: "123 Main St",
-      date: "2021-12-25",
-      time: "12:00 PM",
-      slots: 5,
-      filled: 3,
-      organization: "Food Bank",
-      category: "Food",
-      skills: ["Organization", "Teamwork", "Communication"],
-    },
-    {
-      id: 2,
-      title: "Park Cleanup",
-      description: "Clean up trash and plant flowers.",
-      location: "456 Elm St",
-      date: "2021-12-26",
-      time: "9:00 AM",
-      slots: 10,
-      filled: 7,
-      organization: "Parks Department",
-      category: "Environment",
-      skills: ["Physical Strength", "Attention to Detail", "Teamwork"],
-    },
-    {
-      id: 4,
-      title: "Plant Trees",
-      description: "Plant trees in the park.",
-      location: "101 Pine St",
-      date: "2021-12-28",
-      time: "10:00 AM",
-      slots: 8,
-      filled: 5,
-      organization: "Parks Department",
-      category: "Environment",
-      skills: ["Physical Strength", "Teamwork", "Attention to Detail"],
-    },
-  ];
-
-  const [jobs, setJobs] = useState(jobs_mock);
+  const [jobs, setJobs] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [job, setJob] = useState(false);
 
@@ -60,12 +18,12 @@ const OrganizationJobsList = ({ user }) => {
 
   useEffect(() => {
     const fetchAppliedOpportunities = async () => {
-      const opportunities = await getCreatedOpportunities();
+      const opportunities = await getCreatedOpportunities(user.id);
       setJobs(opportunities);
     };
 
     fetchAppliedOpportunities();
-  });
+  }, []);
 
   return (
     <div>
@@ -91,17 +49,6 @@ const OrganizationJobsList = ({ user }) => {
                       {job.title}
                     </h2>
                     <p className="text-gray-600 mt-2">{job.description}</p>
-                    <div className="text-sm text-gray-500 mt-2">
-                      <p>
-                        <strong>Location:</strong> {job.location}
-                      </p>
-                      <p>
-                        <strong>Date:</strong> {job.date}
-                      </p>
-                      <p>
-                        <strong>Time:</strong> {job.time}
-                      </p>
-                    </div>
                   </div>
                 </div>
                 <div className="mt-4 w-full flex justify-between">

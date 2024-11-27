@@ -4,11 +4,14 @@ const API_URL = "http://localhost:8000"; // Change this if deployed
 
 //USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS
 //Function to login a user
+
+//Completed
 export const signUpUser = async (formData) => {
   const response = await axios.post(`${API_URL}/signup/`, formData); // Adjust URL as needed
   return response.data; // Handle the response as necessary
 };
 
+//Completed
 export const loginUser = async (credentials) => {
   const response = await axios.post(`${API_URL}/login/`, credentials);
   return response.data;
@@ -16,14 +19,25 @@ export const loginUser = async (credentials) => {
 
 //OPPORTUNITIES OPPORTUNITIES OPPORTUNITIES OPPORTUNITIES OPPORTUNITIES OPPORTUNITIES OPPORTUNITIES OPPORTUNITIES
 
+//Completed
 export const createOpportunity = async (opportunity) => {
   const response = await axios.post(`${API_URL}/opportunities/`, opportunity);
   return response.data;
 };
 
+//Completed
 //Fetch all opportunities for non-volunteer users
 export const getOpportunities = async () => {
   const response = await axios.get(`${API_URL}/opportunities/`);
+  return response.data;
+};
+
+//Completed
+//Fetch all opportunities organization has created
+export const getCreatedOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/created`, {
+    params: { id },
+  });
   return response.data;
 };
 
@@ -39,13 +53,8 @@ export const getAppliedOpportunities = async () => {
   return response.data;
 };
 
-//Fetch all opportunities organization has created
-export const getCreatedOpportunities = async () => {
-  const response = await axios.get(`${API_URL}/opportunities/created/`);
-  return response.data;
-};
-
 //APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS
+//Completed
 export const applyForOpportunity = async (application) => {
   const response = await axios.post(`${API_URL}/applications/`, application);
   return response.data;
