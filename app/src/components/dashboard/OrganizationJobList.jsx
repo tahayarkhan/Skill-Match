@@ -8,6 +8,15 @@ const OrganizationJobsList = ({ user }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [job, setJob] = useState(false);
 
+  useEffect(() => {
+    const fetchAppliedOpportunities = async () => {
+      const opportunities = await getCreatedOpportunities(user.id);
+      setJobs(opportunities);
+    };
+
+    fetchAppliedOpportunities();
+  }, []);
+
   const handleAddJob = () => {
     setShowCreateModal(true);
   };
@@ -21,15 +30,6 @@ const OrganizationJobsList = ({ user }) => {
     const updatedJobs = jobs.filter((j) => j.id !== job.id);
     setJobs(updatedJobs);
   };
-
-  useEffect(() => {
-    const fetchAppliedOpportunities = async () => {
-      const opportunities = await getCreatedOpportunities(user.id);
-      setJobs(opportunities);
-    };
-
-    fetchAppliedOpportunities();
-  }, []);
 
   return (
     <div>

@@ -8,7 +8,10 @@ const ApplicationView = ({ application, onBack }) => {
 
   return (
     <div className="p-5 border border-gray-300 rounded max-w-sm mx-auto">
-      <div className="text-xl font-bold mb-2">{application.name}</div>
+      {/*    <div className="text-xl font-bold mb-2">
+        {application.volunteers_table.name}
+      </div> */}
+      <div className="text-gray-600 mb-4">{application.entry}</div>
       <div className="flex justify-between">
         <button
           onClick={onBack}

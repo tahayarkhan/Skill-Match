@@ -9,11 +9,8 @@ const ApplicationsModal = ({ job, onClose }) => {
 
   useEffect(() => {
     const fetchApplications = async () => {
-      /* const data = await getApplications(job.id); */
-      setApplications([
-        { name: "Daryl", bio: "I love brownies", age: "25" },
-        { name: "John", bio: "I love brownies", age: "25" },
-      ]);
+      const data = await getApplications(job.id);
+      setApplications(data);
     };
     fetchApplications();
   }, []);

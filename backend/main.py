@@ -166,6 +166,13 @@ async def delete_application(application_id: str):
         raise HTTPException(status_code=400, detail="Failed to delete application")
     return response.data
 
+@app.get("/applications/{opportunity_id}")
+async def get_opportunity_applications(opportunity_id: str):
+    response = supabase.from_("applications_table").select("*, volunteers_table(name, email)").eq("opportunity_id", opportunity_id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch applications")
+    return response.data
+
 @app.get("/opportunities/applied/{user_id}")
 async def get_user_applications(user_id: str):
     response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id)").eq("user_id", user_id).execute()
