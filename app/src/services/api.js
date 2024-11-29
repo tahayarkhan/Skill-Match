@@ -26,6 +26,14 @@ export const createOpportunity = async (opportunity) => {
 };
 
 //Completed
+export const deleteOpportunity = async (opportunityId) => {
+  const response = await axios.delete(
+    `${API_URL}/opportunities/${opportunityId}`
+  );
+  return response.data;
+};
+
+//Completed
 //Fetch all opportunities for non-volunteer users
 export const getOpportunities = async () => {
   const response = await axios.get(`${API_URL}/opportunities/`);
@@ -70,6 +78,33 @@ export const acceptApplication = async (applicationId) => {
   const response = await axios.post(`${API_URL}/applications/accept/`, {
     applicationId,
   });
+  return response.data;
+};
+
+//Completed
+export const deleteApplication = async (applicationId) => {
+  const response = await axios.delete(
+    `${API_URL}/applications/${applicationId}`
+  );
+  return response.data;
+};
+
+//ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS ALERTS
+//Completed
+export const createAlert = async (alert) => {
+  const response = await axios.post(`${API_URL}/alerts/`, alert);
+  return response.data;
+};
+
+//Completed
+export const getAlerts = async (userId) => {
+  const response = await axios.get(`${API_URL}/alerts/${userId}`);
+  return response.data;
+};
+
+//Completed
+export const deleteAlert = async (alertId) => {
+  const response = await axios.delete(`${API_URL}/alerts/${alertId}`);
   return response.data;
 };
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import CreateJobModal from "./CreateJobModal";
 import ApplicationsModal from "./ApplicationsModal";
-import { getCreatedOpportunities } from "../../services/api";
+import { getCreatedOpportunities, deleteOpportunity } from "../../services/api";
 
 const OrganizationJobsList = ({ user }) => {
   const [jobs, setJobs] = useState([]);
@@ -14,6 +14,12 @@ const OrganizationJobsList = ({ user }) => {
 
   const handleView = (job) => {
     setJob(job);
+  };
+
+  const handleDelete = async (job) => {
+    await deleteOpportunity(job.id);
+    const updatedJobs = jobs.filter((j) => j.id !== job.id);
+    setJobs(updatedJobs);
   };
 
   useEffect(() => {
@@ -58,7 +64,10 @@ const OrganizationJobsList = ({ user }) => {
                   >
                     View Applications
                   </button>
-                  <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                  <button
+                    onClick={() => handleDelete(job)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
                     Delete
                   </button>
                 </div>

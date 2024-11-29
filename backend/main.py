@@ -39,6 +39,10 @@ class Application(BaseModel):
     opportunity_id: str
     entry: str
 
+class Alerts(BaseModel):
+    user_id: str
+    message: str
+
 class UserLogin(BaseModel):
     email: str
     password: str
@@ -115,6 +119,17 @@ async def create_opportunity(opportunity: Opportunity):
         raise HTTPException(status_code=400, detail="Failed to create opportunity")
     return response.data
 
+@app.delete("/opportunities/{opportunity_id}")
+async def delete_opportunity(opportunity_id: str):
+    # Delete all applications related to the opportunity
+    response = supabase.from_("applications_table").delete().eq("opportunity_id", opportunity_id).execute()
+    # Delete the opportunity
+    response = supabase.from_("opportunities_table").delete().eq("id", opportunity_id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to delete opportunity")
+    
+    return {"message": "Opportunity and related applications deleted successfully"}
+
 @app.get("/opportunities/")
 async def get_opportunities():
     response = supabase.from_("opportunities_table").select("*, employers_table(name)").execute()
@@ -136,13 +151,19 @@ async def get_opportunities():
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
 
-
 @app.post("/applications/")
 async def create_application(application: Application):
     application_data = application.dict()
     response = supabase.table("applications_table").insert(application_data).execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to create application")
+    return response.data
+
+@app.delete("/applications/{application_id}")
+async def delete_application(application_id: str):
+    response = supabase.from_("applications_table").delete().eq("id", application_id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to delete application")
     return response.data
 
 @app.get("/opportunities/applied/{user_id}")
@@ -157,3 +178,24 @@ async def get_volunteers():
     response = supabase.table("volunteers_table").select("*").execute()
     return response.data
 
+@app.post("/alerts/")
+async def create_alert(alert: Alerts):
+    alert_data = alert.dict()
+    response = supabase.table("alerts_table").insert(alert_data).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to create alert")
+    return response.data
+
+@app.get("/alerts/{user_id}")
+async def get_alerts(user_id: str):
+    response = supabase.from_("alerts_table").select("*").eq("user_id", user_id).execute() 
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch alerts")
+    return response.data
+
+@app.delete("/alerts/{alert_id}")
+async def delete_alert(alert_id: str):
+    response = supabase.from_("alerts_table").delete().eq("id", alert_id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to delete alert")
+    return response.data

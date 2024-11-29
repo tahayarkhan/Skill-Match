@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../authCrap/AuthProvider";
+import Alert from "../assets/bell.png";
+import AlertsPopUp from "./AlertsPopUp";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
+  const [showAlerts, setShowAlerts] = useState(false);
 
   return (
     <nav className="bg-gray-800 p-4 flex justify-center relative">
@@ -30,15 +34,24 @@ const Navbar = () => {
       </div>
       <div className="absolute right-6">
         {user ? (
-          <button onClick={logOut} className="text-white hover:text-gray-400">
-            Log Out
-          </button>
+          <div className="flex gap-3 items-center">
+            <img
+              src={Alert}
+              alt="alert"
+              onClick={() => setShowAlerts(!showAlerts)}
+              className="w-5 h-5 invert cursor-pointer hover:filter hover:invert-0 hover:brightness-50"
+            />
+            <button onClick={logOut} className="text-white hover:text-gray-400">
+              Log Out
+            </button>
+          </div>
         ) : (
           <Link to="/login" className="text-white hover:text-gray-400">
             Log In
           </Link>
         )}
       </div>
+      {showAlerts && <AlertsPopUp onClose={() => setShowAlerts(false)} />}
     </nav>
   );
 };

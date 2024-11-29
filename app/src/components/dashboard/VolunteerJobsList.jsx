@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAppliedOpportunities } from "../../services/api";
+import { getAppliedOpportunities, deleteApplication } from "../../services/api";
 
 const VolunteerJobsList = ({ user }) => {
   const [jobs, setJobs] = useState([]);
@@ -7,12 +7,17 @@ const VolunteerJobsList = ({ user }) => {
   useEffect(() => {
     const fetchAppliedOpportunities = async () => {
       const opportunities = await getAppliedOpportunities(user.id);
-      console.log(opportunities);
       setJobs(opportunities);
     };
 
     fetchAppliedOpportunities();
   }, []);
+
+  const handleRevoke = async (id) => {
+    await deleteApplication(id);
+    const newJobs = jobs.filter((job) => job.id !== id);
+    setJobs(newJobs);
+  };
 
   return (
     <div>
@@ -43,7 +48,10 @@ const VolunteerJobsList = ({ user }) => {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                  <button
+                    onClick={() => handleRevoke(job.id)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
                     Revoke
                   </button>
                 </div>

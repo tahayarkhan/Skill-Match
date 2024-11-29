@@ -11,7 +11,6 @@ const ExplorePage = () => {
   const [listings, setListings] = useState([]);
   const [filters, setFilters] = useState({});
 
-  //Real
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
@@ -32,16 +31,18 @@ const ExplorePage = () => {
 
   return (
     <div className="flex h-full w-full">
-      <div className="w-1/4 h-full p-4">
-        <Filters filters={filters} setFilters={setFilters} />
-      </div>
-      <div className="w-full p-4">
-        <div className="flex gap-6">
-          <SearchBar setFilters={setFilters} />
-          {user && user.type === "volunteer" && (
-            <Toggle setListings={setListings} />
-          )}
+      {user && (
+        <div className="w-1/4 h-full p-4">
+          <Filters filters={filters} setFilters={setFilters} />
         </div>
+      )}
+      <div className="w-full p-4">
+        {user && (
+          <div className="flex gap-6">
+            <SearchBar setFilters={setFilters} />
+            {user.type === "volunteer" && <Toggle setListings={setListings} />}
+          </div>
+        )}
         <Listings listings={listings} />
       </div>
     </div>

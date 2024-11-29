@@ -11,7 +11,7 @@ const App = () => {
   const location = useLocation();
   const noNavbar = ["/login", "/signup"];
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-y-scroll">
       {!noNavbar.includes(location.pathname) && <NavBar />}
       <Routes>
         <Route path="/login" element={<Login />} />
