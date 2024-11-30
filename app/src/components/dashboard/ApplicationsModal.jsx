@@ -28,6 +28,7 @@ const ApplicationsModal = ({ job, onClose }) => {
           <ApplicationView
             application={application}
             onBack={() => setApplication(null)}
+            job={job}
           />
         ) : (
           <ApplicationsList

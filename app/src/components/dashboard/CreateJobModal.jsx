@@ -5,6 +5,7 @@ import { useAuth } from "../../authCrap/AuthProvider";
 const CreateJobModal = ({ onClose }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
   const user = useAuth();
 
   const handleSubmit = async (e) => {
@@ -13,6 +14,7 @@ const CreateJobModal = ({ onClose }) => {
       title,
       description,
       employer_id: user.user.id,
+      image,
       /// REVIEW: see if necessary to extract traits in backend
     };
     console.log(newJob);
@@ -37,6 +39,16 @@ const CreateJobModal = ({ onClose }) => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-3 py-2 border rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Image URL</label>
+            <input
+              type="text"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
               className="w-full px-3 py-2 border rounded"
               required
             />

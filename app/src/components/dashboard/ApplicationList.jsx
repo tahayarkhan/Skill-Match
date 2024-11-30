@@ -6,7 +6,6 @@ const ApplicationsList = ({ applications, setApplication, job }) => {
       <h2 className="text-lg font-bold mb-4">{job.title} Applications</h2>
       {applications &&
         applications.map((application) => {
-          console.log(application);
           return (
             <ApplicationOption
               key={application.id}

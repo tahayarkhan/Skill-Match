@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import bcrypt
 from fastapi.middleware.cors import CORSMiddleware
+from cohere_client import enhance_bio, enhance_application, rerank
 
 app = FastAPI()
 
@@ -33,6 +34,7 @@ class Opportunity(BaseModel):
     title: str
     description: str
     employer_id: str
+    image: str
 
 class Application(BaseModel):
     user_id: str
@@ -50,6 +52,18 @@ class UserLogin(BaseModel):
 class EmployerLogin(BaseModel):
     email: str
     password: str
+
+#pydantic models for the request body
+class BioRequest(BaseModel):
+    bio: str
+
+class ApplicationRequest(BaseModel):
+    bio: str
+    position: str
+    text: str
+
+class UserSkills(BaseModel):
+    skills: str
 
 
 @app.get("/")
@@ -111,8 +125,6 @@ async def sign_up(user: Volunteer):
 
 @app.post("/opportunities/")
 async def create_opportunity(opportunity: Opportunity):
-    # log the opportunity to debug 
-    print(f"Creating opportunity: {opportunity}")
     opportunity_data = opportunity.dict()
     response = supabase.table("opportunities_table").insert(opportunity_data).execute()
     if not response.data:
@@ -137,19 +149,22 @@ async def get_opportunities():
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
 
-@app.get("/opportunities/created")
+@app.get("/opportunities/created/")
 async def get_opportunities(id: str = Query(...)):  # Ensure `id` is a required query parameter
     response = supabase.from_("opportunities_table").select("*, employers_table(name)").eq("employer_id", id).execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
 
-@app.get("/opportunities/ranked")
-async def get_opportunities():
+@app.post("/opportunities/ranked/")
+async def get_ranked_opportunities(bio: UserSkills):
     response = supabase.from_("opportunities_table").select("*, employers_table(name)").execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
-    return response.data
+    
+    opportunities = response.data
+    ranked_opportunities = rerank(opportunities, bio.skills)
+    return {"ranked_opportunities": ranked_opportunities}
 
 @app.post("/applications/")
 async def create_application(application: Application):
@@ -175,14 +190,9 @@ async def get_opportunity_applications(opportunity_id: str):
 
 @app.get("/opportunities/applied/{user_id}")
 async def get_user_applications(user_id: str):
-    response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id)").eq("user_id", user_id).execute()
+    response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id, image)").eq("user_id", user_id).execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch applications")
-    return response.data
-
-@app.get("/volunteers/")
-async def get_volunteers():
-    response = supabase.table("volunteers_table").select("*").execute()
     return response.data
 
 @app.post("/alerts/")
@@ -206,3 +216,13 @@ async def delete_alert(alert_id: str):
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to delete alert")
     return response.data
+
+@app.post("/enhance_bio/")
+async def enhance_bio_api(request: BioRequest):
+    print('endpoint hit')
+    print(request.bio)  # Debugging: Print the bio to ensure it's being received
+    return enhance_bio(request.bio)
+
+@app.post("/enhance_application/")
+async def enhance_application_api(request: ApplicationRequest):
+    return enhance_application(request.bio, request.position, request.text)
