@@ -43,10 +43,10 @@ export const getCreatedOpportunities = async (id) => {
   return response.data;
 };
 
-// IMPLEMENT IN BACKEND
 //Fetch all opportunities for logged in volunteer users
-export const getRankedOpportunities = async () => {
-  const response = await axios.get(`${API_URL}/opportunities/ranked/`);
+export const getRankedOpportunities = async (body) => {
+  console.log(body);
+  const response = await axios.post(`${API_URL}/opportunities/ranked/`, body);
   return response.data;
 };
 
@@ -105,12 +105,12 @@ export const deleteAlert = async (alertId) => {
 // IMPLEMENT IN BACKEND
 //Enhance the application text
 export const enhanceApplication = async (text) => {
-  const response = await axios.post(`${API_URL}/enhance/`, { text });
+  const response = await axios.post(`${API_URL}/enhance_application/`, text);
   return response.data;
 };
 
 // IMPLEMENT IN BACKEND
 export const enhanceBio = async (text) => {
-  const response = await axios.post(`${API_URL}/enhance/bio/`, { text });
+  const response = await axios.post(`${API_URL}/enhance_bio/`, text);
   return response.data;
 };

@@ -1,8 +1,12 @@
-import { acceptApplication } from "../../services/api";
+import { acceptApplication, createAlert } from "../../services/api";
 
-const ApplicationView = ({ application, onBack }) => {
+const ApplicationView = ({ application, onBack, job }) => {
   const handleAccept = async () => {
     await acceptApplication(application.id);
+    await createAlert({
+      message: `Your application for ${job.title} has been accepted`,
+      user_id: application.user_id,
+    });
     onBack();
   };
 

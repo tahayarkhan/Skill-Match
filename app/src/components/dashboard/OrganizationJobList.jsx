@@ -48,7 +48,7 @@ const OrganizationJobsList = ({ user }) => {
               >
                 <div className="flex items-start">
                   <div className="w-24 h-24 bg-gray-200 rounded mr-4 flex items-center justify-center">
-                    <img src="https://via.placeholder.com/150" alt="Job" />
+                    <img src={job.image} alt="Job" />
                   </div>
                   <div className="flex-1">
                     <h2 className="text-xl font-semibold text-gray-800">

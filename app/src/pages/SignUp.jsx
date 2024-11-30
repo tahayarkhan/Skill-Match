@@ -42,7 +42,8 @@ const SignUp = () => {
   };
 
   const handleAI = async () => {
-    const enhancedSkills = await enhanceBio(formData.skills);
+    const enhancedSkills = await enhanceBio({ bio: formData.skills });
+    console.log(enhancedSkills);
     setFormData({ ...formData, skills: enhancedSkills });
   };
 
@@ -102,11 +103,8 @@ const SignUp = () => {
               required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-24 resize-none"
             />
-            <div
-              onClick={handleAI}
-              className="absolute bottom-1 right-1 w-8 h-8 m-2 rounded-full hover:bg-gray-200 flex justify-center items-center"
-            >
-              <img src={ai} alt="AI" className="w-6 h-6" />
+            <div className="absolute bottom-1 right-1 w-8 h-8 m-2 rounded-full hover:bg-gray-200 flex justify-center items-center">
+              <img onClick={handleAI} src={ai} alt="AI" className="w-6 h-6" />
             </div>
           </div>
         )}

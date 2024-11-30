@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { getAppliedOpportunities, deleteApplication } from "../../services/api";
+import {
+  getAppliedOpportunities,
+  deleteApplication,
+  createAlert,
+} from "../../services/api";
 
 const VolunteerJobsList = ({ user }) => {
   const [jobs, setJobs] = useState([]);
@@ -13,8 +17,13 @@ const VolunteerJobsList = ({ user }) => {
     fetchAppliedOpportunities();
   }, []);
 
-  const handleRevoke = async (id) => {
+  const handleRevoke = async (job) => {
+    const { id } = job;
     await deleteApplication(id);
+    await createAlert({
+      message: `${user.name} has unapplied from position '${job.opportunities_table.title}'`,
+      user_id: job.opportunities_table.employer_id,
+    });
     const newJobs = jobs.filter((job) => job.id !== id);
     setJobs(newJobs);
   };
@@ -32,11 +41,11 @@ const VolunteerJobsList = ({ user }) => {
             {jobs.map((job) => (
               <div
                 key={job.id}
-                className="bg-white rounded-lg shadow p-6 border border-gray-200"
+                className="bg-white rounded-lg shadow p-6 border border-gray-200 flex justify-between"
               >
                 <div className="flex items-start">
                   <div className="w-24 h-24 bg-gray-200 rounded mr-4 flex items-center justify-center">
-                    <img src="https://via.placeholder.com/150" alt="Job" />
+                    <img src={job.opportunities_table.image} alt="Job" />
                   </div>
                   <div className="flex-1">
                     <h2 className="text-xl font-semibold text-gray-800">
@@ -49,7 +58,7 @@ const VolunteerJobsList = ({ user }) => {
                 </div>
                 <div className="mt-4">
                   <button
-                    onClick={() => handleRevoke(job.id)}
+                    onClick={() => handleRevoke(job)}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                   >
                     Revoke

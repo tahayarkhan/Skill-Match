@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { enhanceApplication, applyForOpportunity } from "../../services/api";
+import {
+  enhanceApplication,
+  applyForOpportunity,
+  createAlert,
+} from "../../services/api";
 import ai from "../../assets/ai.png";
 import { useAuth } from "../../authCrap/AuthProvider";
 
@@ -15,6 +19,10 @@ const OpportunityApplication = ({ listing, handleBack, handleClose }) => {
         entry: applicationText,
         user_id: user.user.id,
       });
+      await createAlert({
+        message: `New application for ${listing.title}`,
+        user_id: listing.employer_id,
+      });
       alert("Application submitted!");
       handleClose(e);
     } catch (error) {
@@ -25,8 +33,13 @@ const OpportunityApplication = ({ listing, handleBack, handleClose }) => {
 
   const handleEnhance = async () => {
     try {
-      const res = await enhanceApplication(applicationText);
-      setApplicationText(res.data);
+      const body = {
+        text: applicationText,
+        bio: user.user.skills,
+        position: listing.description,
+      };
+      const res = await enhanceApplication(body);
+      setApplicationText(res);
     } catch (error) {
       console.error("Failed to enhance application:", error);
       alert("Failed to enhance application. Please try again.");

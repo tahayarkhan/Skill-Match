@@ -16,7 +16,8 @@ const ExplorePage = () => {
       try {
         let response;
         if (user && user.type === "volunteer") {
-          response = await getRankedOpportunities();
+          response = await getRankedOpportunities({ skills: user.skills });
+          response = response.ranked_opportunities;
         } else {
           response = await getOpportunities();
         }
