@@ -14,22 +14,31 @@ const ExplorePage = () => {
   const { user } = useAuth();
   const [listings, setListings] = useState([]);
   const [filters, setFilters] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
         let response;
         if (user && user.type === "volunteer") {
-          if (filters.length == 0) {
+          response = await getFilteredRankedOpportunities({
+            skills: user.skills,
+            filters: filters,
+            search,
+          });
+          response = response.ranked_opportunities;
+
+          /* if (filters.length == 0) {
             response = await getRankedOpportunities({ skills: user.skills });
             response = response.ranked_opportunities;
           } else {
             response = await getFilteredRankedOpportunities({
               skills: user.skills,
               filters: filters,
+              search,
             });
             response = response.ranked_opportunities;
-          }
+          } */
         } else {
           response = await getOpportunities();
         }
@@ -40,7 +49,7 @@ const ExplorePage = () => {
     };
 
     fetchOpportunities();
-  }, [filters]);
+  }, [filters, search]);
 
   return (
     <div className="flex h-full w-full">
@@ -52,7 +61,7 @@ const ExplorePage = () => {
       <div className="w-full p-4">
         {user && user.type === "volunteer" && (
           <div className="flex gap-6">
-            <SearchBar setFilters={setFilters} />
+            <SearchBar setSearch={setSearch} search={search} />
             <Toggle setListings={setListings} />
           </div>
         )}

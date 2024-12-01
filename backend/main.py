@@ -70,6 +70,7 @@ class UserSkills(BaseModel):
 class Filters(BaseModel):
     skills: str
     filters: List[int]
+    search: str
 
 @app.get("/")
 async def read_root():
@@ -195,16 +196,11 @@ async def get_ranked_opportunities(bio: UserSkills):
 @app.post("/opportunities/filtered_ranked/")
 async def get_filtered_ranked_opportunities(filters: Filters):
     try:
-        # Base query for opportunities
-        query = (
-            supabase
-            .from_("opportunities_table")
-            .select("*, employers_table(name, email)")
-        )
+        # Step 1: Base query for opportunities
+        query = supabase.from_("opportunities_table").select("*, employers_table(name, email)")
 
-        # Apply trait filtering
+        # Step 2: Apply trait filtering (if provided)
         if filters.filters:
-            # Get opportunity IDs that match the selected traits
             trait_response = (
                 supabase
                 .from_("opportunities_traits_table")
@@ -212,17 +208,37 @@ async def get_filtered_ranked_opportunities(filters: Filters):
                 .filter("trait_id", "in", f"({','.join(map(str, filters.filters))})")
                 .execute()
             )
+
+            if not trait_response.data:
+                return {"ranked_opportunities": []}  # No opportunities match the traits
+
+            # Extract unique opportunity IDs
             opportunity_ids = {row["opportunity_id"] for row in trait_response.data}
+
             # Filter opportunities by these IDs
             query = query.filter("id", "in", f"({','.join(opportunity_ids)})")
-        # Execute the final query
+
+        # Step 3: Apply search filtering (if provided)
+        if filters.search:
+            print(filters.search)
+            search_query = f"%{filters.search}%"  # SQL LIKE pattern for partial matching
+            query = query.or_(
+                f"title.ilike.{search_query},description.ilike.{search_query}"
+            )
+
+        # Step 4: Execute the query
         response = query.execute()
+
         if not response.data:
-            return {"ranked_opportunities": []}
+            return {"ranked_opportunities": []}  # No opportunities found
+
         opportunities = response.data
-        # Re-rank the opportunities based on user skills
+
+        # Step 5: Re-rank the opportunities based on user skills
         ranked_opportunities = rerank(opportunities, filters.skills)
+
         return {"ranked_opportunities": ranked_opportunities}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
