@@ -44,6 +44,8 @@ const VolunteerJobsList = ({ user }) => {
     setJobs(newJobs);
   };
 
+  const handleFeedback = async (job) => {};
+
   return (
     <div>
       <div className="flex justify-center mb-2">
@@ -62,7 +64,7 @@ const VolunteerJobsList = ({ user }) => {
               }`}
               onClick={() => setOption("applied")}
             >
-              Open
+              Applied
             </button>
             <button
               className={`px-2 py-1 text-sm rounded ${
@@ -72,7 +74,7 @@ const VolunteerJobsList = ({ user }) => {
               }`}
               onClick={() => setOption("accepted")}
             >
-              Started
+              Accepted
             </button>
             <button
               className={`px-2 py-1 text-sm rounded ${
@@ -108,14 +110,26 @@ const VolunteerJobsList = ({ user }) => {
                     </p>
                   </div>
                 </div>
-                <div className="mt-4">
-                  <button
-                    onClick={() => handleRevoke(job)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    Revoke
-                  </button>
-                </div>
+                {option != "completed" && (
+                  <div className="mt-4">
+                    <button
+                      onClick={() => handleRevoke(job)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      Revoke
+                    </button>
+                  </div>
+                )}
+                {option === "completed" && (
+                  <div className="mt-4">
+                    <button
+                      onClick={() => handleFeedback(job)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      Feedback
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>

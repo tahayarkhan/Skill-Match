@@ -19,7 +19,7 @@ const OpportunityCard = ({ listing }) => {
       onClick={handleOpen}
       className="bg-white shadow-lg rounded-lg p-4 border border-gray-200 transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
     >
-      <h2 className="text-lg font-semibold text-gray-800">{listing.title}</h2>
+      <h2 className="text-sm font-semibold text-gray-800">{listing.title}</h2>
       <div className="bg-gray-500 mb-2">
         <img
           src={listing.image ? listing.image : noImage}
@@ -27,7 +27,9 @@ const OpportunityCard = ({ listing }) => {
           className="w-full h-32 object-cover mt-2"
         />
       </div>
-      <p className="text-sm text-gray-600">{listing.employers_table.name}</p>
+      <p className="text-sm text-gray-600 text-xs">
+        {listing.employers_table.name}
+      </p>
       {show && (
         <OpportunityModal
           listing={listing}

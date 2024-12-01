@@ -99,10 +99,8 @@ export const getApplications = async (jobId) => {
 };
 
 // IMPLEMENT IN BACKEND
-export const acceptApplication = async (applicationId) => {
-  const response = await axios.post(`${API_URL}/applications/accept/`, {
-    applicationId,
-  });
+export const acceptApplication = async (id) => {
+  const response = await axios.post(`${API_URL}/applications/accept/${id}`);
   return response.data;
 };
 
