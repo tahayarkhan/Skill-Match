@@ -10,6 +10,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gray-800 p-4 flex justify-center relative">
+      <div className="absolute left-6 text-white text-lg font-bold">Skill Match</div>
       <div className="flex justify-between items-center">
         <ul className="flex space-x-4">
           <li>
