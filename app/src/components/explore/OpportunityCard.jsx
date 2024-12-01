@@ -28,7 +28,6 @@ const OpportunityCard = ({ listing }) => {
         />
       </div>
       <p className="text-sm text-gray-600">{listing.employers_table.name}</p>
-      <p className="text-sm text-gray-700 mt-2">{listing.description}</p>
       {show && (
         <OpportunityModal
           listing={listing}

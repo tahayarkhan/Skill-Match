@@ -158,7 +158,7 @@ async def get_opportunities(id: str = Query(...)):  # Ensure `id` is a required 
 
 @app.post("/opportunities/ranked/")
 async def get_ranked_opportunities(bio: UserSkills):
-    response = supabase.from_("opportunities_table").select("*, employers_table(name)").execute()
+    response = supabase.from_("opportunities_table").select("*, employers_table(name, email)").execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     

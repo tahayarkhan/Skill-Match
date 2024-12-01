@@ -37,7 +37,7 @@ export const getOpportunities = async () => {
 
 //Fetch all opportunities organization has created
 export const getCreatedOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/created`, {
+  const response = await axios.get(`${API_URL}/opportunities/created/`, {
     params: { id },
   });
   return response.data;
