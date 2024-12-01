@@ -29,6 +29,7 @@ const Home = () => {
           />
         </div>
       </div>
+      <div className="absolute bottom-[-56px] left-0 w-full h-1/4 bg-gradient-to-t from-blue-600 to-transparent"></div>
     </>
   );
 };
