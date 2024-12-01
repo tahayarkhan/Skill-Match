@@ -11,17 +11,24 @@ const App = () => {
   const location = useLocation();
   const noNavbar = ["/login", "/signup"];
   return (
-    <div className="h-screen flex flex-col overflow-y-scroll">
+    <div className="flex flex-col min-h-screen">
       {!noNavbar.includes(location.pathname) && <NavBar />}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/explore" element={<ExplorePage />} />
-        <Route path="/" element={<HomePage />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
-      </Routes>
+     
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </div>
+
+      <footer className="bg-gray-800 text-white text-center py-4">
+        <p>2024 Skill Match. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
