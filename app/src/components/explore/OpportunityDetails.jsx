@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 const OpportunityDetails = ({ listing, handleApply }) => {
   const { user } = useAuth();
 
-  console.log(listing);
-
   return (
     <div>
       <p className="text-gray-600">{listing.employers_table.name}</p>

@@ -66,7 +66,6 @@ export const getFinishedOpportunities = async (id) => {
 
 //Fetch all opportunities for logged in volunteer users
 export const getRankedOpportunities = async (body) => {
-  console.log(body);
   const response = await axios.post(`${API_URL}/opportunities/ranked/`, body);
   return response.data;
 };

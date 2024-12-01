@@ -15,7 +15,6 @@ const AuthProvider = ({ children }) => {
   const loginAction = async (data) => {
     try {
       const response = await loginUser(data);
-      console.log(response);
       if (response.message === "Login successful") {
         response.user.type = response.type;
         setUser(response.user);

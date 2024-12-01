@@ -17,7 +17,6 @@ const CreateJobModal = ({ onClose }) => {
       image,
       /// REVIEW: see if necessary to extract traits in backend
     };
-    console.log(newJob);
     await createOpportunity(newJob);
     onClose();
   };

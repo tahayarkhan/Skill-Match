@@ -43,7 +43,6 @@ const SignUp = () => {
 
   const handleAI = async () => {
     const enhancedSkills = await enhanceBio({ bio: formData.skills });
-    console.log(enhancedSkills);
     setFormData({ ...formData, skills: enhancedSkills });
   };
 
@@ -164,8 +163,8 @@ const SignUp = () => {
         <button
           onClick={() => navigate("/")}
           className="mt-4 bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-          >
-            Back to Home
+        >
+          Back to Home
         </button>
       </form>
     </div>
