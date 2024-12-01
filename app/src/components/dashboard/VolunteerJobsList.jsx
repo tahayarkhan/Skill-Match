@@ -1,21 +1,37 @@
 import { useState, useEffect } from "react";
 import {
   getAppliedOpportunities,
+  getAcceptedOpportunities,
+  getCompletedOpportunities,
   deleteApplication,
   createAlert,
 } from "../../services/api";
 
 const VolunteerJobsList = ({ user }) => {
   const [jobs, setJobs] = useState([]);
+  const [option, setOption] = useState("applied");
 
   useEffect(() => {
-    const fetchAppliedOpportunities = async () => {
-      const opportunities = await getAppliedOpportunities(user.id);
-      setJobs(opportunities);
-    };
-
-    fetchAppliedOpportunities();
-  }, []);
+    if (option == "applied") {
+      const fetchAppliedOpportunities = async () => {
+        const opportunities = await getAppliedOpportunities(user.id);
+        setJobs(opportunities);
+      };
+      fetchAppliedOpportunities();
+    } else if (option == "accepted") {
+      const fetchAcceptedOpportunities = async () => {
+        const opportunities = await getAcceptedOpportunities(user.id);
+        setJobs(opportunities);
+      };
+      fetchAcceptedOpportunities();
+    } else if (option == "completed") {
+      const fetchCompletedOpportunities = async () => {
+        const opportunities = await getCompletedOpportunities(user.id);
+        setJobs(opportunities);
+      };
+      fetchCompletedOpportunities();
+    }
+  }, [option]);
 
   const handleRevoke = async (job) => {
     const { id } = job;
@@ -30,9 +46,45 @@ const VolunteerJobsList = ({ user }) => {
 
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-2">
         <div className="w-2/3 mx-auto px-4">
-          <h1 className="text-2xl font-bold text-gray-800">Jobs Applied To</h1>
+          <h1 className="text-2xl font-bold text-gray-800">My Opportunities</h1>
+        </div>
+      </div>
+      <div className="flex justify-center mb-2">
+        <div className="w-2/3 mx-auto px-4">
+          <div className="flex space-x-2">
+            <button
+              className={`px-2 py-1 text-sm rounded ${
+                option === "applied"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setOption("applied")}
+            >
+              Open
+            </button>
+            <button
+              className={`px-2 py-1 text-sm rounded ${
+                option === "accepted"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setOption("accepted")}
+            >
+              Started
+            </button>
+            <button
+              className={`px-2 py-1 text-sm rounded ${
+                option === "completed"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setOption("completed")}
+            >
+              Completed
+            </button>
+          </div>
         </div>
       </div>
       <div className="mx-auto px-4 py-8 flex flex-cols items-center justify-center">

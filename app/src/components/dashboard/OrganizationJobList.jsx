@@ -5,7 +5,7 @@ import {
   deleteOpportunity,
   getOpenOpportunities,
   getStartedOpportunities,
-  getCompletedOpportunities,
+  getFinishedOpportunities,
 } from "../../services/api";
 
 const OrganizationJobsList = ({ user }) => {
@@ -27,9 +27,9 @@ const OrganizationJobsList = ({ user }) => {
         setJobs(opportunities);
       };
       fetchStartedOpportunities();
-    } else if (option == "completed") {
+    } else if (option == "finished") {
       const fetchCompletedOpportunities = async () => {
-        const opportunities = await getCompletedOpportunities(user.id);
+        const opportunities = await getFinishedOpportunities(user.id);
         setJobs(opportunities);
       };
       fetchCompletedOpportunities();
@@ -54,7 +54,7 @@ const OrganizationJobsList = ({ user }) => {
     <div>
       <div className="flex justify-center mb-2">
         <div className="w-2/3 mx-auto px-4">
-          <h1 className="text-2xl font-bold text-gray-800">Created Jobs</h1>
+          <h1 className="text-2xl font-bold text-gray-800">My Opportunities</h1>
         </div>
       </div>
       <div className="flex justify-center mb-2">
@@ -86,7 +86,7 @@ const OrganizationJobsList = ({ user }) => {
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
-              onClick={() => setOption("completed")}
+              onClick={() => setOption("finished")}
             >
               Completed
             </button>

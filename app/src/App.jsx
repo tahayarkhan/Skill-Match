@@ -13,7 +13,7 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {!noNavbar.includes(location.pathname) && <NavBar />}
-     
+
       <div className="flex-grow">
         <Routes>
           <Route path="/login" element={<Login />} />

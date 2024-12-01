@@ -57,8 +57,8 @@ export const getStartedOpportunities = async (id) => {
   return response.data;
 };
 
-export const getCompletedOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/completed/`, {
+export const getFinishedOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/finished/`, {
     params: { id },
   });
   return response.data;
@@ -74,6 +74,16 @@ export const getRankedOpportunities = async (body) => {
 //Fetch all opportunities user has applied to
 export const getAppliedOpportunities = async (id) => {
   const response = await axios.get(`${API_URL}/opportunities/applied/${id}`);
+  return response.data;
+};
+
+export const getAcceptedOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/accepted/${id}`);
+  return response.data;
+};
+
+export const getCompletedOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/completed/${id}`);
   return response.data;
 };
 

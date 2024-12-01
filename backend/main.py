@@ -170,12 +170,14 @@ async def get_opportunities_started(id: str = Query(...)):  # Ensure `id` is a r
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
 
-@app.get("/opportunities/completed/")
-async def get_opportunities_completed(id: str = Query(...)):  # Ensure `id` is a required query parameter
+@app.get("/opportunities/finished/")
+async def get_opportunities_finished(id: str = Query(...)):  # Ensure `id` is a required query parameter
     response = supabase.from_("opportunities_table").select("*, employers_table(name)").eq("employer_id", id).eq("status", "completed").execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
+
+
 
 @app.post("/opportunities/ranked/")
 async def get_ranked_opportunities(bio: UserSkills):
@@ -211,7 +213,21 @@ async def get_opportunity_applications(opportunity_id: str):
 
 @app.get("/opportunities/applied/{user_id}")
 async def get_user_applications(user_id: str):
-    response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id, image)").eq("user_id", user_id).execute()
+    response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id, image)").eq("user_id", user_id).eq("status", "applied").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch applications")
+    return response.data
+
+@app.get("/opportunities/accepted/{user_id}")
+async def get_user_accepted_applications(user_id: str):
+    response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id, image)").eq("user_id", user_id).eq("status", "accepted").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch applications")
+    return response.data
+
+@app.get("/opportunities/completed/{user_id}")
+async def get_user_completed_applications(user_id: str):
+    response = supabase.from_("applications_table").select("*, opportunities_table(title, description, employer_id, image)").eq("user_id", user_id).eq("status", "completed").execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch applications")
     return response.data
