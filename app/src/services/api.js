@@ -43,6 +43,27 @@ export const getCreatedOpportunities = async (id) => {
   return response.data;
 };
 
+export const getOpenOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/open/`, {
+    params: { id },
+  });
+  return response.data;
+};
+
+export const getStartedOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/started/`, {
+    params: { id },
+  });
+  return response.data;
+};
+
+export const getCompletedOpportunities = async (id) => {
+  const response = await axios.get(`${API_URL}/opportunities/completed/`, {
+    params: { id },
+  });
+  return response.data;
+};
+
 //Fetch all opportunities for logged in volunteer users
 export const getRankedOpportunities = async (body) => {
   console.log(body);

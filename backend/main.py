@@ -156,6 +156,27 @@ async def get_opportunities(id: str = Query(...)):  # Ensure `id` is a required 
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
 
+@app.get("/opportunities/open/")
+async def get_opportunities_open(id: str = Query(...)):  # Ensure `id` is a required query parameter
+    response = supabase.from_("opportunities_table").select("*, employers_table(name)").eq("employer_id", id).eq("status", "open").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
+    return response.data
+
+@app.get("/opportunities/started/")
+async def get_opportunities_started(id: str = Query(...)):  # Ensure `id` is a required query parameter
+    response = supabase.from_("opportunities_table").select("*, employers_table(name)").eq("employer_id", id).eq("status", "started").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
+    return response.data
+
+@app.get("/opportunities/completed/")
+async def get_opportunities_completed(id: str = Query(...)):  # Ensure `id` is a required query parameter
+    response = supabase.from_("opportunities_table").select("*, employers_table(name)").eq("employer_id", id).eq("status", "completed").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
+    return response.data
+
 @app.post("/opportunities/ranked/")
 async def get_ranked_opportunities(bio: UserSkills):
     response = supabase.from_("opportunities_table").select("*, employers_table(name, email)").execute()

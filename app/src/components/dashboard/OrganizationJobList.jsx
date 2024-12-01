@@ -1,21 +1,40 @@
 import { useState, useEffect } from "react";
 import CreateJobModal from "./CreateJobModal";
 import ApplicationsModal from "./ApplicationsModal";
-import { getCreatedOpportunities, deleteOpportunity } from "../../services/api";
+import {
+  deleteOpportunity,
+  getOpenOpportunities,
+  getStartedOpportunities,
+  getCompletedOpportunities,
+} from "../../services/api";
 
 const OrganizationJobsList = ({ user }) => {
   const [jobs, setJobs] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [job, setJob] = useState(false);
+  const [option, setOption] = useState("open");
 
   useEffect(() => {
-    const fetchAppliedOpportunities = async () => {
-      const opportunities = await getCreatedOpportunities(user.id);
-      setJobs(opportunities);
-    };
-
-    fetchAppliedOpportunities();
-  }, []);
+    if (option == "open") {
+      const fetchOpenOpportunities = async () => {
+        const opportunities = await getOpenOpportunities(user.id);
+        setJobs(opportunities);
+      };
+      fetchOpenOpportunities();
+    } else if (option == "started") {
+      const fetchStartedOpportunities = async () => {
+        const opportunities = await getStartedOpportunities(user.id);
+        setJobs(opportunities);
+      };
+      fetchStartedOpportunities();
+    } else if (option == "completed") {
+      const fetchCompletedOpportunities = async () => {
+        const opportunities = await getCompletedOpportunities(user.id);
+        setJobs(opportunities);
+      };
+      fetchCompletedOpportunities();
+    }
+  }, [option]);
 
   const handleAddJob = () => {
     setShowCreateModal(true);
@@ -33,9 +52,45 @@ const OrganizationJobsList = ({ user }) => {
 
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-2">
         <div className="w-2/3 mx-auto px-4">
           <h1 className="text-2xl font-bold text-gray-800">Created Jobs</h1>
+        </div>
+      </div>
+      <div className="flex justify-center mb-2">
+        <div className="w-2/3 mx-auto px-4">
+          <div className="flex space-x-2">
+            <button
+              className={`px-2 py-1 text-sm rounded ${
+                option === "open"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setOption("open")}
+            >
+              Open
+            </button>
+            <button
+              className={`px-2 py-1 text-sm rounded ${
+                option === "started"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setOption("started")}
+            >
+              Started
+            </button>
+            <button
+              className={`px-2 py-1 text-sm rounded ${
+                option === "completed"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+              onClick={() => setOption("completed")}
+            >
+              Completed
+            </button>
+          </div>
         </div>
       </div>
       <div className="mx-auto px-4 py-8 flex flex-cols items-center justify-center">
