@@ -150,3 +150,16 @@ export const startOpportunity = async (id) => {
   const response = await axios.post(`${API_URL}/opportunities/start/${id}`);
   return response.data;
 };
+
+export const getTraits = async () => {
+  const response = await axios.get(`${API_URL}/traits/`);
+  return response.data;
+};
+
+export const getFilteredRankedOpportunities = async (body) => {
+  const response = await axios.post(
+    `${API_URL}/opportunities/filtered_ranked/`,
+    body
+  );
+  return response.data;
+};

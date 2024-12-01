@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const Toggle = ({ setListings }) => {
-  const [isToggled, setIsToggled] = useState(false);
+  const [isToggled, setIsToggled] = useState(true);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);

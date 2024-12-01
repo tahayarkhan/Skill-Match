@@ -15,6 +15,7 @@ const OrganizationJobsList = ({ user }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [job, setJob] = useState(false);
   const [option, setOption] = useState("open");
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     if (option == "open") {
@@ -48,7 +49,7 @@ const OrganizationJobsList = ({ user }) => {
       };
       fetchCompletedOpportunities();
     }
-  }, [option]);
+  }, [option, load]);
 
   const handleAddJob = () => {
     setShowCreateModal(true);
@@ -194,7 +195,10 @@ const OrganizationJobsList = ({ user }) => {
         </button>
       </div>
       {showCreateModal && (
-        <CreateJobModal onClose={() => setShowCreateModal(false)} />
+        <CreateJobModal
+          onClose={() => setShowCreateModal(false)}
+          setLoad={setLoad}
+        />
       )}
       {job && <ApplicationsModal job={job} onClose={() => setJob(false)} />}
     </div>

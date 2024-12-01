@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createOpportunity } from "../../services/api";
 import { useAuth } from "../../authCrap/AuthProvider";
 
-const CreateJobModal = ({ onClose }) => {
+const CreateJobModal = ({ onClose, setLoad }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
@@ -18,6 +18,7 @@ const CreateJobModal = ({ onClose }) => {
       /// REVIEW: see if necessary to extract traits in backend
     };
     await createOpportunity(newJob);
+    setLoad((prev) => !prev);
     onClose();
   };
 

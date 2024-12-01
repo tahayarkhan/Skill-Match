@@ -116,16 +116,28 @@ const SignUp = () => {
         )}
 
         {formData.userType === "employer" && (
-          <div className="mb-4">
-            <input
-              type="text"
-              name="phone"
-              placeholder="Your Phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+          <div>
+            <div className="mb-4">
+              <input
+                type="text"
+                name="phone"
+                placeholder="Your Phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+            <div className="mb-4">
+              <textarea
+                name="mission"
+                placeholder="Your Mission"
+                value={formData.mission}
+                onChange={handleChange}
+                required
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-24 resize-none"
+              />
+            </div>
           </div>
         )}
 

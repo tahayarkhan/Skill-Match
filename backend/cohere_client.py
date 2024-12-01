@@ -26,7 +26,7 @@ def enhance_application(bio: str, position: str, text: str) -> str:
 def rerank(opportunities: List[Dict], user_bio: str) -> List[Dict]:
     response = co.rerank(
     model="rerank-english-v3.0",
-    query="Sort these opportunities based on how well they match the skills relating to this user's bio: " + user_bio,
+    query="Sort these opportunities based on how likely a person with the following bio will enjoy and be good at them: " + user_bio,
     documents=[{"text": opp["description"], "id": opp["id"]} for opp in opportunities],
     )
     # Create a mapping of index to relevance score

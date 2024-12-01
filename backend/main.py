@@ -6,6 +6,7 @@ import os
 import bcrypt
 from fastapi.middleware.cors import CORSMiddleware
 from cohere_client import enhance_bio, enhance_application, rerank
+from typing import List
 
 app = FastAPI()
 
@@ -29,6 +30,7 @@ class Volunteer(BaseModel):
     password: str
     skills: str = None  # Optional for employers
     phone: str = None   # Optional for users
+    mission: str = None  # Optional for users
 
 class Opportunity(BaseModel):
     title: str
@@ -65,6 +67,9 @@ class ApplicationRequest(BaseModel):
 class UserSkills(BaseModel):
     skills: str
 
+class Filters(BaseModel):
+    skills: str
+    filters: List[int]
 
 @app.get("/")
 async def read_root():
@@ -106,7 +111,7 @@ async def sign_up(user: Volunteer):
             "email": user.email,
             "password": hashed_password,
             "phone": user.phone,
-            # Additional fields as necessary
+            "mission": user.mission,
         }
         response = supabase.table("employers_table").insert(employer_data).execute()
         return {"message": "Signup successful", "user": response.data, "type": "employer"}
@@ -177,8 +182,6 @@ async def get_opportunities_finished(id: str = Query(...)):  # Ensure `id` is a 
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
 
-
-
 @app.post("/opportunities/ranked/")
 async def get_ranked_opportunities(bio: UserSkills):
     response = supabase.from_("opportunities_table").select("*, employers_table(name, email)").execute()
@@ -188,6 +191,40 @@ async def get_ranked_opportunities(bio: UserSkills):
     opportunities = response.data
     ranked_opportunities = rerank(opportunities, bio.skills)
     return {"ranked_opportunities": ranked_opportunities}
+
+@app.post("/opportunities/filtered_ranked/")
+async def get_filtered_ranked_opportunities(filters: Filters):
+    try:
+        # Base query for opportunities
+        query = (
+            supabase
+            .from_("opportunities_table")
+            .select("*, employers_table(name, email)")
+        )
+
+        # Apply trait filtering
+        if filters.filters:
+            # Get opportunity IDs that match the selected traits
+            trait_response = (
+                supabase
+                .from_("opportunities_traits_table")
+                .select("opportunity_id")
+                .filter("trait_id", "in", f"({','.join(map(str, filters.filters))})")
+                .execute()
+            )
+            opportunity_ids = {row["opportunity_id"] for row in trait_response.data}
+            # Filter opportunities by these IDs
+            query = query.filter("id", "in", f"({','.join(opportunity_ids)})")
+        # Execute the final query
+        response = query.execute()
+        if not response.data:
+            return {"ranked_opportunities": []}
+        opportunities = response.data
+        # Re-rank the opportunities based on user skills
+        ranked_opportunities = rerank(opportunities, filters.skills)
+        return {"ranked_opportunities": ranked_opportunities}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/applications/")
 async def create_application(application: Application):
@@ -291,3 +328,11 @@ async def enhance_bio_api(request: BioRequest):
 @app.post("/enhance_application/")
 async def enhance_application_api(request: ApplicationRequest):
     return enhance_application(request.bio, request.position, request.text)
+
+@app.get("/traits/")
+async def get_traits():
+    response = supabase.from_("traits_table").select("*").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch traits")
+    return response.data
+
