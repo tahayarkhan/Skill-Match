@@ -6,6 +6,8 @@ import {
   getOpenOpportunities,
   getStartedOpportunities,
   getFinishedOpportunities,
+  completeOpportunity,
+  startOpportunity,
 } from "../../services/api";
 
 const OrganizationJobsList = ({ user }) => {
@@ -17,20 +19,32 @@ const OrganizationJobsList = ({ user }) => {
   useEffect(() => {
     if (option == "open") {
       const fetchOpenOpportunities = async () => {
-        const opportunities = await getOpenOpportunities(user.id);
-        setJobs(opportunities);
+        try {
+          const opportunities = await getOpenOpportunities(user.id);
+          setJobs(opportunities);
+        } catch (err) {
+          setJobs([]);
+        }
       };
       fetchOpenOpportunities();
     } else if (option == "started") {
       const fetchStartedOpportunities = async () => {
-        const opportunities = await getStartedOpportunities(user.id);
-        setJobs(opportunities);
+        try {
+          const opportunities = await getStartedOpportunities(user.id);
+          setJobs(opportunities);
+        } catch (err) {
+          setJobs([]);
+        }
       };
       fetchStartedOpportunities();
     } else if (option == "finished") {
       const fetchCompletedOpportunities = async () => {
-        const opportunities = await getFinishedOpportunities(user.id);
-        setJobs(opportunities);
+        try {
+          const opportunities = await getFinishedOpportunities(user.id);
+          setJobs(opportunities);
+        } catch (err) {
+          setJobs([]);
+        }
       };
       fetchCompletedOpportunities();
     }
@@ -46,6 +60,18 @@ const OrganizationJobsList = ({ user }) => {
 
   const handleDelete = async (job) => {
     await deleteOpportunity(job.id);
+    const updatedJobs = jobs.filter((j) => j.id !== job.id);
+    setJobs(updatedJobs);
+  };
+
+  const handleComplete = async (job) => {
+    await completeOpportunity(job.id);
+    const updatedJobs = jobs.filter((j) => j.id !== job.id);
+    setJobs(updatedJobs);
+  };
+
+  const handleStart = async (job) => {
+    await startOpportunity(job.id);
     const updatedJobs = jobs.filter((j) => j.id !== job.id);
     setJobs(updatedJobs);
   };
@@ -82,7 +108,7 @@ const OrganizationJobsList = ({ user }) => {
             </button>
             <button
               className={`px-2 py-1 text-sm rounded ${
-                option === "completed"
+                option === "finished"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
@@ -113,18 +139,46 @@ const OrganizationJobsList = ({ user }) => {
                   </div>
                 </div>
                 <div className="mt-4 w-full flex justify-between">
-                  <button
-                    onClick={() => handleView(job)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    View Applications
-                  </button>
-                  <button
-                    onClick={() => handleDelete(job)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    Delete
-                  </button>
+                  {job.status === "open" && (
+                    <button
+                      onClick={() => handleView(job)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      View Applications
+                    </button>
+                  )}
+                  {job.status === "started" && (
+                    <button
+                      onClick={() => handleView(job)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      View Volunteers
+                    </button>
+                  )}
+                  <div className="flex gap-2">
+                    {job.status === "started" && (
+                      <button
+                        onClick={() => handleComplete(job)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Complete
+                      </button>
+                    )}
+                    {job.status === "open" && (
+                      <button
+                        onClick={() => handleStart(job)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Start
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDelete(job)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

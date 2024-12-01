@@ -32,16 +32,20 @@ const ExplorePage = () => {
 
   return (
     <div className="flex h-full w-full">
-      {user && (
+      {user && user.type === "volunteer" && (
         <div className="w-1/4 h-full p-4">
-          <Filters filters={filters} setFilters={setFilters} />
+          <Filters
+            filters={filters}
+            setFilters={setFilters}
+            show={listings.length}
+          />
         </div>
       )}
       <div className="w-full p-4">
-        {user && (
+        {user && user.type === "volunteer" && (
           <div className="flex gap-6">
             <SearchBar setFilters={setFilters} />
-            {user.type === "volunteer" && <Toggle setListings={setListings} />}
+            <Toggle setListings={setListings} />
           </div>
         )}
         <Listings listings={listings} />

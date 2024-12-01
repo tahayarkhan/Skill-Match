@@ -29,6 +29,13 @@ const SignUp = () => {
     setError(null);
     setSuccessMessage("");
 
+    // Password validation
+    if (formData.password.length < 8 || formData.password.length > 64) {
+      setError("Password must be between 8 and 64 characters.");
+      setLoading(false);
+      return;
+    }
+
     try {
       await signUpAction(formData);
       setSuccessMessage(

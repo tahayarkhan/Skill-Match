@@ -140,3 +140,13 @@ export const enhanceBio = async (text) => {
   const response = await axios.post(`${API_URL}/enhance_bio/`, text);
   return response.data;
 };
+
+export const completeOpportunity = async (id) => {
+  const response = await axios.post(`${API_URL}/opportunities/complete/${id}`);
+  return response.data;
+};
+
+export const startOpportunity = async (id) => {
+  const response = await axios.post(`${API_URL}/opportunities/start/${id}`);
+  return response.data;
+};

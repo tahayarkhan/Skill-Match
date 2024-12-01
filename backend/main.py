@@ -239,6 +239,27 @@ async def get_user_completed_applications(user_id: str):
         raise HTTPException(status_code=400, detail="Failed to fetch applications")
     return response.data
 
+@app.post("/opportunities/complete/{id}")
+async def complete_opportunity(id: str):
+    # Update the status of the opportunity to "completed"
+    response = supabase.from_("opportunities_table").update({"status": "completed"}).eq("id", id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to complete opportunity")
+    
+    # Update the status of all related applications to "completed"
+    response = supabase.from_("applications_table").update({"status": "completed"}).eq("opportunity_id", id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to update related applications")
+    
+    return {"message": "Opportunity and related applications completed successfully"}
+
+@app.post("/opportunities/start/{id}")
+async def start_opportunity(id: str):
+    response = supabase.from_("opportunities_table").update({"status": "started"}).eq("id", id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to start opportunity")
+    return response.data
+
 @app.post("/alerts/")
 async def create_alert(alert: Alerts):
     alert_data = alert.dict()
