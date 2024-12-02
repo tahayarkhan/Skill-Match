@@ -6,8 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import HomePage from "./pages/HomePage";
 import ExplorePage from "./pages/ExplorePage";
 import NavBar from "./components/Navbar";
-
+// define app, use routes to seth paths
 const App = () => {
+
   const location = useLocation();
   const noNavbar = ["/login", "/signup"];
   return (
@@ -27,7 +28,7 @@ const App = () => {
       </div>
 
       <footer className="bg-gray-800 text-white text-center py-4">
-        <p>2024 Skill Match. All rights reserved.</p>
+        <p>2024 SKILL MATCH. ALL RIGHTS RESERVED.</p>
       </footer>
     </div>
   );

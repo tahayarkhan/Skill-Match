@@ -13,6 +13,7 @@ const OpportunityApplication = ({ listing, handleBack, handleClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
       await applyForOpportunity({
         opportunity_id: listing.id,

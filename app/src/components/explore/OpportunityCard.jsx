@@ -5,11 +5,13 @@ import noImage from "../../assets/default.png";
 const OpportunityCard = ({ listing }) => {
   const [show, setShow] = useState(false);
 
+
+// when card is closed
   const handleClose = (e) => {
     e.stopPropagation();
     setShow(false);
   };
-
+//when card is open
   const handleOpen = () => {
     setShow(true);
   };

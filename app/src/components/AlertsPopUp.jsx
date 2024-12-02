@@ -2,6 +2,7 @@ import { useAuth } from "../authCrap/AuthProvider";
 import { useEffect, useState } from "react";
 import { getAlerts, deleteAlert } from "../services/api";
 
+// usestate function
 const AlertsPopUp = ({ onClose }) => {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState([]);

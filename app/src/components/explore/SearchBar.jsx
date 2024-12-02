@@ -3,10 +3,12 @@ import { useState } from "react";
 const SearchBar = ({ setSearch, search }) => {
   const [inputValue, setInputValue] = useState(search);
 
+  
+//handles when changes made to input
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
-
+//when user clicks submit
   const handleSubmit = (e) => {
     e.preventDefault();
     setSearch(inputValue);
