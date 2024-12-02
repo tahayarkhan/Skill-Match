@@ -123,66 +123,79 @@ const OrganizationJobsList = ({ user }) => {
       <div className="mx-auto px-4 py-8 flex flex-cols items-center justify-center">
         <div className="w-2/3">
           <div className="space-y-4">
-            {jobs.map((job) => (
-              <div
-                key={job.id}
-                className="bg-white rounded-lg shadow p-6 border border-gray-200"
-              >
+            {jobs.length === 0 && (
+              <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
                 <div className="flex items-start">
-                  <div className="w-24 h-24 bg-gray-200 rounded mr-4 flex items-center justify-center">
-                    <img src={job.image} alt="Job" />
-                  </div>
                   <div className="flex-1">
                     <h2 className="text-xl font-semibold text-gray-800">
-                      {job.title}
+                      No opportunities found
                     </h2>
-                    <p className="text-gray-600 mt-2">{job.description}</p>
-                  </div>
-                </div>
-                <div className="mt-4 w-full flex justify-between">
-                  {job.status === "open" && (
-                    <button
-                      onClick={() => handleView(job)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                      View Applications
-                    </button>
-                  )}
-                  {job.status === "started" && (
-                    <button
-                      onClick={() => handleView(job)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                      View Volunteers
-                    </button>
-                  )}
-                  <div className="flex gap-2">
-                    {job.status === "started" && (
-                      <button
-                        onClick={() => handleComplete(job)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                      >
-                        Complete
-                      </button>
-                    )}
-                    {job.status === "open" && (
-                      <button
-                        onClick={() => handleStart(job)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                      >
-                        Start
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleDelete(job)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                      Delete
-                    </button>
+                    <p className="text-gray-600 mt-2"></p>
                   </div>
                 </div>
               </div>
-            ))}
+            )}
+            {jobs.length > 0 &&
+              jobs.map((job) => (
+                <div
+                  key={job.id}
+                  className="bg-white rounded-lg shadow p-6 border border-gray-200"
+                >
+                  <div className="flex items-start">
+                    <div className="w-24 h-24 bg-gray-200 rounded mr-4 flex items-center justify-center">
+                      <img src={job.image} alt="Job" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-xl font-semibold text-gray-800">
+                        {job.title}
+                      </h2>
+                      <p className="text-gray-600 mt-2">{job.description}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 w-full flex justify-between">
+                    {job.status === "open" && (
+                      <button
+                        onClick={() => handleView(job)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        View Applications
+                      </button>
+                    )}
+                    {job.status === "started" && (
+                      <button
+                        onClick={() => handleView(job)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        View Volunteers
+                      </button>
+                    )}
+                    <div className="flex gap-2">
+                      {job.status === "started" && (
+                        <button
+                          onClick={() => handleComplete(job)}
+                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        >
+                          Complete
+                        </button>
+                      )}
+                      {job.status === "open" && (
+                        <button
+                          onClick={() => handleStart(job)}
+                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        >
+                          Start
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDelete(job)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

@@ -150,7 +150,7 @@ async def delete_opportunity(opportunity_id: str):
 
 @app.get("/opportunities/")
 async def get_opportunities():
-    response = supabase.from_("opportunities_table").select("*, employers_table(name)").execute()
+    response = supabase.from_("opportunities_table").select("*, employers_table(name)").eq("status", "open").execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     return response.data
@@ -185,7 +185,7 @@ async def get_opportunities_finished(id: str = Query(...)):  # Ensure `id` is a 
 
 @app.post("/opportunities/ranked/")
 async def get_ranked_opportunities(bio: UserSkills):
-    response = supabase.from_("opportunities_table").select("*, employers_table(name, email)").execute()
+    response = supabase.from_("opportunities_table").select("*, employers_table(name, email)").eq("status", "open").execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch opportunities")
     
@@ -197,7 +197,7 @@ async def get_ranked_opportunities(bio: UserSkills):
 async def get_filtered_ranked_opportunities(filters: Filters):
     try:
         # Step 1: Base query for opportunities
-        query = supabase.from_("opportunities_table").select("*, employers_table(name, email)")
+        query = supabase.from_("opportunities_table").select("*, employers_table(name, email)").eq("status", "open")
 
         # Step 2: Apply trait filtering (if provided)
         if filters.filters:

@@ -44,24 +44,36 @@ export const getCreatedOpportunities = async (id) => {
 };
 
 export const getOpenOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/open/`, {
-    params: { id },
-  });
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/opportunities/open/`, {
+      params: { id },
+    });
+    return response.data;
+  } catch (err) {
+    return [];
+  }
 };
 
 export const getStartedOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/started/`, {
-    params: { id },
-  });
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/opportunities/started/`, {
+      params: { id },
+    });
+    return response.data;
+  } catch (err) {
+    return [];
+  }
 };
 
 export const getFinishedOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/finished/`, {
-    params: { id },
-  });
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/opportunities/finished/`, {
+      params: { id },
+    });
+    return response.data;
+  } catch (err) {
+    return [];
+  }
 };
 
 //Fetch all opportunities for logged in volunteer users
@@ -72,18 +84,32 @@ export const getRankedOpportunities = async (body) => {
 
 //Fetch all opportunities user has applied to
 export const getAppliedOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/applied/${id}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/opportunities/applied/${id}`);
+    return response.data;
+  } catch (err) {
+    return [];
+  }
 };
 
 export const getAcceptedOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/accepted/${id}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_URL}/opportunities/accepted/${id}`);
+    return response.data;
+  } catch (err) {
+    return [];
+  }
 };
 
 export const getCompletedOpportunities = async (id) => {
-  const response = await axios.get(`${API_URL}/opportunities/completed/${id}`);
-  return response.data;
+  try {
+    const response = await axios.get(
+      `${API_URL}/opportunities/completed/${id}`
+    );
+    return response.data;
+  } catch (err) {
+    return [];
+  }
 };
 
 //APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS APPLICATIONS
