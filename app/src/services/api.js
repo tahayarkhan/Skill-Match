@@ -124,9 +124,29 @@ export const getApplications = async (jobId) => {
   return response.data;
 };
 
+export const getOpenApplications = async (jobId) => {
+  const response = await axios.get(`${API_URL}/applications/open/${jobId}`);
+  return response.data;
+};
+
+export const getAcceptedApplications = async (jobId) => {
+  const response = await axios.get(`${API_URL}/applications/accepted/${jobId}`);
+  return response.data;
+};
+
+export const getFinishedApplications = async (jobId) => {
+  const response = await axios.get(`${API_URL}/applications/finished/${jobId}`);
+  return response.data;
+};
+
 // IMPLEMENT IN BACKEND
 export const acceptApplication = async (id) => {
   const response = await axios.post(`${API_URL}/applications/accept/${id}`);
+  return response.data;
+};
+
+export const completeApplication = async (id) => {
+  const response = await axios.post(`${API_URL}/applications/complete/${id}`);
   return response.data;
 };
 
@@ -187,5 +207,10 @@ export const getFilteredRankedOpportunities = async (body) => {
     `${API_URL}/opportunities/filtered_ranked/`,
     body
   );
+  return response.data;
+};
+
+export const createFeedback = async (feedback) => {
+  const response = await axios.post(`${API_URL}/feedback/`, feedback);
   return response.data;
 };

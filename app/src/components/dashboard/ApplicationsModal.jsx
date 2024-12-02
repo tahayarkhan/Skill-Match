@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
-import { getApplications } from "../../services/api";
+import {
+  getOpenApplications,
+  getAcceptedApplications,
+  getFinishedApplications,
+} from "../../services/api";
 import ApplicationsList from "./ApplicationList";
 import ApplicationView from "./ApplicationView";
 
-const ApplicationsModal = ({ job, onClose }) => {
+const ApplicationsModal = ({ job, onClose, option }) => {
   const [applications, setApplications] = useState([]);
   const [application, setApplication] = useState(null);
 
   useEffect(() => {
     const fetchApplications = async () => {
-      const data = await getApplications(job.id);
-      setApplications(data);
+      if (option === "open") {
+        const data = await getOpenApplications(job.id);
+        setApplications(data);
+      } else if (option === "started") {
+        const data = await getAcceptedApplications(job.id);
+        setApplications(data);
+      } else if (option === "finished") {
+        const data = await getFinishedApplications(job.id);
+        setApplications(data);
+      }
     };
     fetchApplications();
   }, []);
@@ -29,11 +41,14 @@ const ApplicationsModal = ({ job, onClose }) => {
             application={application}
             onBack={() => setApplication(null)}
             job={job}
+            setApplications={setApplications}
+            option={option}
           />
         ) : (
           <ApplicationsList
             applications={applications}
             setApplication={setApplication}
+            setApplications={setApplications}
             job={job}
           />
         )}

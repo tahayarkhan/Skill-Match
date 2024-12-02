@@ -1,6 +1,11 @@
 import ApplicationOption from "./ApplicationOption";
 
-const ApplicationsList = ({ applications, setApplication, job }) => {
+const ApplicationsList = ({
+  applications,
+  setApplication,
+  setApplications,
+  job,
+}) => {
   return (
     <div>
       <h2 className="text-lg font-bold mb-4">{job.title} Applications</h2>
@@ -11,6 +16,7 @@ const ApplicationsList = ({ applications, setApplication, job }) => {
               key={application.id}
               application={application}
               setApplication={setApplication}
+              setApplications={setApplications}
             />
           );
         })}

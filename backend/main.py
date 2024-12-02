@@ -72,6 +72,10 @@ class Filters(BaseModel):
     filters: List[int]
     search: str
 
+class Feedback(BaseModel):
+    feedback: str
+    application_id: str
+
 @app.get("/")
 async def read_root():
     return {"message": "Welcome to the API!"}
@@ -264,11 +268,39 @@ async def get_opportunity_applications(opportunity_id: str):
         raise HTTPException(status_code=400, detail="Failed to fetch applications")
     return response.data
 
+@app.get("/applications/accepted/{opportunity_id}")
+async def get_accepted_applications(opportunity_id: str):
+    response = supabase.from_("applications_table").select("*, volunteers_table(name, email)").eq("opportunity_id", opportunity_id).eq("status", "accepted").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch applications")
+    return response.data
+
+@app.get("/applications/finished/{opportunity_id}")
+async def get_accepted_applications(opportunity_id: str):
+    response = supabase.from_("applications_table").select("*, volunteers_table(name, email)").eq("opportunity_id", opportunity_id).eq("status", "completed").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch applications")
+    return response.data
+
+@app.get("/applications/open/{opportunity_id}")
+async def get_open_applications(opportunity_id: str):
+    response = supabase.from_("applications_table").select("*, volunteers_table(name, email)").eq("opportunity_id", opportunity_id).eq("status", "applied").execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to fetch applications")
+    return response.data
+
 @app.post("/applications/accept/{id}")
 async def accept_application(id: str):
     response = supabase.from_("applications_table").update({"status": "accepted"}).eq("id", id).execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to accept application")
+    return response.data
+
+@app.post("/applications/complete/{id}")
+async def complete_application(id: str):
+    response = supabase.from_("applications_table").update({"status": "completed"}).eq("id", id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to complete application")
     return response.data
 
 @app.get("/opportunities/applied/{user_id}")
@@ -300,7 +332,7 @@ async def complete_opportunity(id: str):
         raise HTTPException(status_code=400, detail="Failed to complete opportunity")
     
     # Update the status of all related applications to "completed"
-    response = supabase.from_("applications_table").update({"status": "completed"}).eq("opportunity_id", id).execute()
+    response = supabase.from_("applications_table").update({"status": "completed"}).eq("opportunity_id", id).eq("status", "accepted").execute()
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to update related applications")
     
@@ -351,4 +383,11 @@ async def get_traits():
     if not response.data:
         raise HTTPException(status_code=400, detail="Failed to fetch traits")
     return response.data
+
+@app.post("/feedback/")
+async def submit_feedback(feedback: Feedback):
+    response = supabase.from_("applications_table").update({"feedback": feedback.feedback}).eq("id", feedback.application_id).execute()
+    if not response.data:
+        raise HTTPException(status_code=400, detail="Failed to submit feedback")
+    return {"message": "Feedback submitted successfully"}
 

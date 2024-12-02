@@ -8,6 +8,8 @@ import {
   getFinishedOpportunities,
   completeOpportunity,
   startOpportunity,
+  getAcceptedApplications,
+  createAlert,
 } from "../../services/api";
 
 const OrganizationJobsList = ({ user }) => {
@@ -66,12 +68,28 @@ const OrganizationJobsList = ({ user }) => {
   };
 
   const handleComplete = async (job) => {
+    const applicatons = await getAcceptedApplications(job.id);
+    applicatons.forEach(async (application) => {
+      const body = {
+        user_id: application.user_id,
+        message: `The opportunity ${job.title} has been completed.`,
+      };
+      await createAlert(body);
+    });
     await completeOpportunity(job.id);
     const updatedJobs = jobs.filter((j) => j.id !== job.id);
     setJobs(updatedJobs);
   };
 
   const handleStart = async (job) => {
+    const applications = await getAcceptedApplications(job.id);
+    applications.forEach(async (application) => {
+      const body = {
+        user_id: application.user_id,
+        message: `The opportunity ${job.title} has started.`,
+      };
+      await createAlert(body);
+    });
     await startOpportunity(job.id);
     const updatedJobs = jobs.filter((j) => j.id !== job.id);
     setJobs(updatedJobs);
@@ -192,6 +210,14 @@ const OrganizationJobsList = ({ user }) => {
                       >
                         Delete
                       </button>
+                      {job.status === "completed" && (
+                        <button
+                          onClick={() => handleView(job)}
+                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        >
+                          View Feedback
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -213,7 +239,13 @@ const OrganizationJobsList = ({ user }) => {
           setLoad={setLoad}
         />
       )}
-      {job && <ApplicationsModal job={job} onClose={() => setJob(false)} />}
+      {job && (
+        <ApplicationsModal
+          job={job}
+          onClose={() => setJob(false)}
+          option={option}
+        />
+      )}
     </div>
   );
 };

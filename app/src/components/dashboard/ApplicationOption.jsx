@@ -1,4 +1,8 @@
-const ApplicationOption = ({ application, setApplication }) => {
+const ApplicationOption = ({
+  application,
+  setApplication,
+  setApplications,
+}) => {
   return (
     <div className="border border-gray-300 p-4 rounded-lg w-full mx-auto my-4 flex justify-between">
       <div className="mb-2">

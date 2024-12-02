@@ -6,10 +6,12 @@ import {
   deleteApplication,
   createAlert,
 } from "../../services/api";
+import FeedBackModal from "./FeedBackModal";
 
 const VolunteerJobsList = ({ user }) => {
   const [jobs, setJobs] = useState([]);
   const [option, setOption] = useState("applied");
+  const [job, setJob] = useState(false);
 
   useEffect(() => {
     if (option == "applied") {
@@ -43,8 +45,6 @@ const VolunteerJobsList = ({ user }) => {
     const newJobs = jobs.filter((job) => job.id !== id);
     setJobs(newJobs);
   };
-
-  const handleFeedback = async (job) => {};
 
   return (
     <div>
@@ -136,7 +136,7 @@ const VolunteerJobsList = ({ user }) => {
                   {option === "completed" && (
                     <div className="mt-4">
                       <button
-                        onClick={() => handleFeedback(job)}
+                        onClick={() => setJob(job)}
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                       >
                         Feedback
@@ -148,6 +148,7 @@ const VolunteerJobsList = ({ user }) => {
           </div>
         </div>
       </div>
+      {job != false && <FeedBackModal job={job} setJob={setJob} />}
     </div>
   );
 };
