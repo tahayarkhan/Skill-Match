@@ -4,6 +4,7 @@ import { useAuth } from "../authCrap/AuthProvider";
 import Alert from "../assets/bell.png";
 import AlertsPopUp from "./AlertsPopUp";
 
+// used to access user state and logut function from auth provider
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const [showAlerts, setShowAlerts] = useState(false);
@@ -14,6 +15,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center">
         <ul className="flex space-x-4">
           <li>
+          
             <Link to="/" className="text-white hover:text-gray-400">
               Home
             </Link>
@@ -47,6 +49,7 @@ const Navbar = () => {
             </button>
           </div>
         ) : (
+          // link to 
           <Link to="/login" className="text-white hover:text-gray-400">
             Log In
           </Link>
