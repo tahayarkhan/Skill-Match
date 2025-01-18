@@ -13,6 +13,20 @@ Watch the full project demonstration on YouTube:
 
 ---
 
+## Documentation
+
+For detailed documentation, including system design diagrams, workflows, test cases, and project management details, visit our project documentation:  
+📄 **[View Documentation](https://publuu.com/flip-book/773515/1714634)**  
+
+### Documentation Highlights:
+- **System Architecture**: Overview of the layered design and MVC principles.
+- **Workflow Diagrams**: Sequence, activity, and architecture diagrams.
+- **Agile Methodology**: Insights into our iterative development process.
+- **Testing Approach**: Comprehensive test cases.
+- **Subsystem Details**: Authentication, profile management, AI-powered matching, and more.
+
+---
+
 ## Features
 
 1. **Student Profiles**  
