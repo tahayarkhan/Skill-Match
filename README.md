@@ -6,6 +6,13 @@ High school students often face challenges in finding the right volunteer opport
 
 ---
 
+## Video Demonstration
+
+Watch the full project demonstration on YouTube:  
+[![AI-Powered Volunteer Matching Platform](https://img.youtube.com/vi/qWnB8xOTpVw/0.jpg)](https://youtu.be/qWnB8xOTpVw)  
+
+---
+
 ## Features
 
 1. **Student Profiles**  
