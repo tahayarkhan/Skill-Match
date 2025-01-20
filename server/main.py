@@ -14,7 +14,7 @@ load_dotenv()
 app = FastAPI()
 
 
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:8000").split(",")
+allowed_origins = os.getenv("ALLOWED_ORIGINS")
 
 
 app.add_middleware(
