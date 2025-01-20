@@ -19,7 +19,7 @@ allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://loc
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins= allowed_origins # Allow only your frontend origin
+    allow_origins= allowed_origins ,# Allow only your frontend origin
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
