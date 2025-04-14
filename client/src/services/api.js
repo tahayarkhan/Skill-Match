@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000"; // Change this if deployed
+const API_URL = import.meta.env.VITE_API_URL;// Change this if deployed
 
 //USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS
 //Function to login a user
