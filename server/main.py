@@ -8,17 +8,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from cohere_client import enhance_bio, enhance_application, rerank
 from typing import List
 
+
+load_dotenv()  
+
 app = FastAPI()
+
+
+origins = os.getenv("CORS_ORIGINS", "").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:8000"],  # Allow only your frontend origin
+    allow_origins=origins,  # Allow only your frontend origin
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
 
-load_dotenv()  
+
 url: str = os.getenv("SUPABASE_URL")
 key: str = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
