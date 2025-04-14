@@ -1,8 +1,6 @@
 import axios from "axios";
 
-
-
-const API_URL = process.env.REACT_APP_API_URL ; // Use the API URL from the .env file, with a fallback to localhost
+const API_URL = "http://localhost:8000"; // Change this if deployed
 
 //USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS
 //Function to login a user
