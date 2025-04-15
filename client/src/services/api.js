@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;// Change this if deployed
-console.log(API_URL)
 
 //USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS USERS
 //Function to login a user

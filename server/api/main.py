@@ -17,7 +17,7 @@ origins = os.getenv("CORS_ORIGINS", "")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://skill-match-cps731.vercel.app"],  # Allow only your frontend origin
+    allow_origins=origins,  # Allow only your frontend origin
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
