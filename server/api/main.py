@@ -14,7 +14,7 @@ load_dotenv()
 app = FastAPI()
 
 
-origins = os.getenv("CORS_ORIGINS", "").split(",")
+origins = os.getenv("CORS_ORIGINS", "")
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,6 +23,8 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
+
+print(f"Allowed Origins: {origins}")
 
 
 url: str = os.getenv("SUPABASE_URL")
