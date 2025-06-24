@@ -7,6 +7,8 @@ load_dotenv()
 
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 
+print(os.getenv("COHERE_API_KEY")) 
+
 co = cohere.ClientV2(COHERE_API_KEY)
 
 def enhance_bio(bio: str) -> str:
