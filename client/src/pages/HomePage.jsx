@@ -1,35 +1,54 @@
 import volunteer from "../assets/volunteer.png";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-screen p-4">
-        <div className="flex flex-col items-center text-center">
-          <h1 className="text-4xl font-bold mb-4">
+      <div className="flex flex-col lg:flex-row items-center justify-between h-screen p-4 lg:p-12 relative overflow-hidden">
+        
+        {/* Text Section */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="flex-1 text-center lg:text-left space-y-6 mt-20 lg:mt-0"
+        >
+          <h1 className="text-4xl lg:text-5xl font-bold text-gray-600">
             Welcome to the Volunteer Matching Platform
           </h1>
-          <p className="text-lg mb-6">
+          <p className="text-lg lg:text-xl text-gray-600">
             Find volunteer opportunities that match your skills and interests!
           </p>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/login")}
-            className="px-6 py-3 bg-blue-600 text-white font-semibold text-lg rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
+            className="px-6 py-3 bg-blue-600 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
           >
             Start Now!
-          </button>
-        </div>
-        <div className="flex justify-center mt-8">
+          </motion.button>
+        </motion.div>
+
+        {/* Image Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="flex justify-center mt-8 lg:mt-0 flex-1"
+        >
           <img
             src={volunteer}
             alt="Volunteer Illustration"
-            className="h-auto w-full max-w-md"
+            className="w-full max-w-md lg:max-w-lg"
           />
-        </div>
+        </motion.div>
       </div>
-      <div className="absolute bottom-[-56px] left-0 w-full h-1/4 bg-gradient-to-t from-blue-600 to-transparent"></div>
+
+      {/* Bottom gradient */}
+      <div className="absolute bottom-[-56px] left-0 w-full h-1/4 bg-gradient-to-t from-blue-300 to-transparent pointer-events-none z-[-1]"></div>    
     </>
   );
 };

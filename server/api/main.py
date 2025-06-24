@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 import bcrypt
 from fastapi.middleware.cors import CORSMiddleware
-from .cohere_client import enhance_bio, enhance_application, rerank
+from cohere_client import enhance_bio, enhance_application, rerank
 from typing import List
 
 
